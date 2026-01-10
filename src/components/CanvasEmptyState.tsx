@@ -1,10 +1,9 @@
-import React from 'react';
 import { MousePointer2, Video, Film, Image as ImageIcon, Music, LayoutTemplate } from 'lucide-react';
 import { useStore } from '../store/useStore';
 
 export function CanvasEmptyState() {
     const createChain = useStore((state) => state.createChain);
-    const setShowTemplates = (show: boolean) => {
+    const setShowTemplates = (_show: boolean) => {
         // This is a bit of a hack since we don't have direct access to App's state here
         // But we can trigger the templates button via DOM or move state to store later.
         // For now, let's assume we can pass a prop or use a global event.
