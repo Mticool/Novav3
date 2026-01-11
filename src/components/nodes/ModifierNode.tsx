@@ -101,7 +101,7 @@ export const ModifierNode = memo(({ id, data, selected }: NodeProps) => {
       {/* Header */}
       <div className="px-3 py-2 border-b border-white/5 flex items-center gap-2">
         <Icon size={16} className={textColorClass} />
-        <span className="flex-1 text-sm font-semibold text-white">
+        <span className="flex-1 text-sm font-semibold text-white node-title">
           {config.label}
         </span>
 
@@ -127,7 +127,7 @@ export const ModifierNode = memo(({ id, data, selected }: NodeProps) => {
       </div>
 
       {/* Content */}
-      <div className="p-3 space-y-2">
+      <div className="p-3 space-y-2 node-detail">
         {/* Selected Preview */}
         <div className="bg-black/20 rounded-lg px-3 py-2 border border-white/5">
           <div className="text-xs text-white/40 mb-1">Selected:</div>

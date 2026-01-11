@@ -171,15 +171,15 @@ export const CameraNode = memo(({ id, data, selected }: NodeProps) => {
 
       {/* Header */}
       <div className="px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm text-white/60">
+        <div className="flex items-center gap-2 text-sm text-white/60 node-title">
           <Camera size={14} />
           <span>Изменить угол камеры #{id.slice(-1)}</span>
         </div>
-        <span className="text-xs text-white/40">Экспериментальный</span>
+        <span className="text-xs text-white/40 node-detail">Экспериментальный</span>
       </div>
 
       {/* 3D Cube Preview */}
-      <div className="px-4 pb-4">
+      <div className="px-4 pb-4 node-detail">
         <CubePreview
           rotateAngle={rotateAngle}
           verticalAngle={verticalAngle}
@@ -201,7 +201,7 @@ export const CameraNode = memo(({ id, data, selected }: NodeProps) => {
       </div>
 
       {/* Controls - Freepik style pills */}
-      <div className="px-4 pb-4 space-y-4">
+      <div className="px-4 pb-4 space-y-4 node-detail">
         {/* Control Pills */}
         <div className="flex gap-2 justify-center flex-wrap">
           {/* Rotate control */}

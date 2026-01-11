@@ -85,7 +85,13 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
   } | null>(null);
 
   const { zoom } = useViewport();
-  const zoomClass = zoom < 0.5 ? 'zoom-far' : zoom < 0.8 ? 'zoom-mid' : 'zoom-near';
+
+  // Debug zoom level if needed
+  useEffect(() => {
+    console.log('[FlowEditor] Zoom level:', zoom);
+  }, [zoom]);
+
+  const zoomClass = zoom < 0.6 ? 'zoom-far' : zoom < 0.85 ? 'zoom-mid' : 'zoom-near';
 
   // Panels state
   const [showLibrary, setShowLibrary] = useState(false);

@@ -392,7 +392,7 @@ body {
   transition: font-size 0.2s ease, opacity 0.2s ease;
 }
 
-/* Zoom Far (< 0.5) - Simplified View */
+/* Zoom Far (< 0.6) - Simplified View */
 .zoom-far .node-detail {
   opacity: 0;
   pointer-events: none;
@@ -414,7 +414,7 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
-/* Zoom Mid (< 0.8) */
+/* Zoom Mid (< 0.85) */
 .zoom-mid .node-detail {
   opacity: 0.4;
   pointer-events: none;

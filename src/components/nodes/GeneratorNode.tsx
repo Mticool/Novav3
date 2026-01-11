@@ -177,7 +177,7 @@ export const GeneratorNode = memo(({ id, data, selected }: NodeProps<GeneratorNo
         <input
           type="text"
           defaultValue={data?.title || `${generationType === 'image' ? 'Image' : 'Video'} Generator`}
-          className="flex-1 bg-transparent text-sm font-semibold text-white outline-none"
+          className="flex-1 bg-transparent text-sm font-semibold text-white outline-none node-title"
           onChange={(e) => updateNode(id, { title: e.target.value })}
         />
 
@@ -203,7 +203,7 @@ export const GeneratorNode = memo(({ id, data, selected }: NodeProps<GeneratorNo
       </div>
 
       {/* Model Selection */}
-      <div className="p-3 space-y-3">
+      <div className="p-3 space-y-3 node-detail">
         <div className="space-y-2">
           <label className="text-xs text-white/50 uppercase tracking-wide">Model</label>
           <select
