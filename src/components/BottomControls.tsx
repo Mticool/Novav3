@@ -51,26 +51,26 @@ export function BottomControls() {
                 {/* Zoom controls */}
                 <button
                     onClick={() => zoomOut()}
-                    className="w-9 h-9 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"
+                    className="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"
                     title="Уменьшить"
                 >
-                    <ZoomOut size={18} />
+                    <ZoomOut size={20} />
                 </button>
 
                 <button
                     onClick={() => zoomIn()}
-                    className="w-9 h-9 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"
+                    className="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"
                     title="Увеличить"
                 >
-                    <ZoomIn size={18} />
+                    <ZoomIn size={20} />
                 </button>
 
                 <button
                     onClick={() => fitView({ padding: 0.2, duration: 300 })}
-                    className="w-9 h-9 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"
+                    className="w-11 h-11 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"
                     title="Вписать в экран"
                 >
-                    <Maximize2 size={18} />
+                    <Maximize2 size={20} />
                 </button>
 
                 {/* Divider */}
@@ -80,17 +80,17 @@ export function BottomControls() {
                 <button
                     onClick={handleRunAll}
                     disabled={isRunning || nodes.length === 0}
-                    className="h-9 px-4 btn-neon rounded-full flex items-center gap-2 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="h-11 px-6 btn-neon rounded-full flex items-center gap-2 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Запустить весь workflow"
                 >
                     {isRunning ? (
                         <>
-                            <Loader2 size={16} className="animate-spin" />
+                            <Loader2 size={18} className="animate-spin" />
                             <span className="text-xs">{progress}</span>
                         </>
                     ) : (
                         <>
-                            <Play size={16} />
+                            <Play size={18} />
                             <span>Run All</span>
                         </>
                     )}

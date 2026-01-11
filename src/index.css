@@ -121,17 +121,25 @@ body {
 }
 
 .react-flow__handle {
-  width: 18px !important;
-  height: 18px !important;
+  width: 22px !important;
+  height: 22px !important;
   border: 2px solid rgba(255, 255, 255, 0.22) !important;
   background: rgba(20, 20, 20, 0.9) !important;
-  border-radius: 10px !important;
+  border-radius: 12px !important;
   transition: all 0.2s ease !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   color: rgba(255, 255, 255, 0.75) !important;
+  z-index: 100 !important;
+}
+
+@media (pointer: coarse) {
+  .react-flow__handle {
+    width: 28px !important;
+    height: 28px !important;
+  }
 }
 
 .react-flow__handle:hover {
@@ -175,9 +183,9 @@ body {
   stroke-width: 3px !important;
 }
 
-/* Node selection - no animation */
+/* Node selection state */
 .react-flow__node.selected {
-  /* No pulsing animation */
+  outline: none !important;
 }
 
 /* Node executing state */
@@ -211,7 +219,7 @@ body {
 
 /* Node state borders */
 .react-flow__node[data-state="idle"] {
-  /* Default gray border (already in component) */
+  border-width: 1px;
 }
 
 .react-flow__node[data-state="loading"] {
@@ -348,9 +356,11 @@ body {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Selected node - no glow */
-.react-flow__node.selected {
-  /* No glow to prevent flickering */
+/* iPad Pro Specific Layout Tweaks */
+@media (max-width: 1180px) {
+  .sidebar-collapsed {
+    width: 60px !important;
+  }
 }
 
 /* MiniMap стили */

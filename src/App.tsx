@@ -185,7 +185,8 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
           maxZoom={2}
           zoomOnScroll={true}
           zoomOnPinch={true}
-          panOnScroll={false}
+          panOnScroll={true}
+          panOnScrollMode={'all' as any}
           fitView
           className="bg-canvas-bg"
           deleteKeyCode="Delete"
@@ -193,8 +194,9 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
           snapToGrid={true}
           snapGrid={[20, 20]}
           nodesDraggable={true}
-          nodeDragThreshold={2}
+          nodeDragThreshold={5}
           onPaneClick={handlePaneClick}
+          preventScrolling={true}
         >
           <Background
             gap={24}

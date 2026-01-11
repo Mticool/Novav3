@@ -14,18 +14,18 @@ export function Sidebar({ onOpenLibrary, onOpenHistory }: SidebarProps) {
     <>
       {/* Floating left toolbar (Glassmorphism style) */}
       <div className="fixed left-4 top-1/2 -translate-y-1/2 z-30">
-        <div className="w-14 glass-panel rounded-2xl shadow-2xl shadow-black/70 flex flex-col items-center py-2 gap-1">
+        <div className="w-16 glass-panel rounded-2xl shadow-2xl shadow-black/70 flex flex-col items-center py-3 gap-2">
           {/* Selection tool */}
           <SidebarButton icon={MousePointer2} label="Выбор" active />
 
-          <div className="w-10 h-px bg-white/5 my-1" />
+          <div className="w-12 h-px bg-white/5 my-1" />
 
           {/* Add Nodes */}
           <button
             onClick={() => setShowAddMenu(!showAddMenu)}
             className={`
               sidebar-add-button
-              w-10 h-10 rounded-xl flex items-center justify-center
+              w-11 h-11 rounded-xl flex items-center justify-center
               transition-all duration-200
               ${showAddMenu
                 ? 'bg-accent-neon/20 text-accent-neon'
@@ -34,12 +34,12 @@ export function Sidebar({ onOpenLibrary, onOpenHistory }: SidebarProps) {
             `}
             title="Добавить узел"
           >
-            <Plus size={18} />
+            <Plus size={20} />
           </button>
 
           <SidebarButton icon={Library} label="Библиотека" onClick={onOpenLibrary} />
 
-          <div className="w-10 h-px bg-white/5 my-1" />
+          <div className="w-12 h-px bg-white/5 my-1" />
 
           <SidebarButton icon={Clock} label="История" onClick={onOpenHistory} />
         </div>
@@ -68,7 +68,7 @@ function SidebarButton({
     <button
       onClick={onClick}
       className={`
-        w-10 h-10 rounded-xl
+        w-11 h-11 rounded-xl
         flex items-center justify-center
         transition-all duration-200
         group relative
@@ -79,7 +79,7 @@ function SidebarButton({
       `}
       title={label}
     >
-      <Icon size={18} className={`transition-colors ${active ? 'text-white' : 'text-white/40 group-hover:text-white/80'}`} />
+      <Icon size={20} className={`transition-colors ${active ? 'text-white' : 'text-white/40 group-hover:text-white/80'}`} />
     </button>
   );
 }
