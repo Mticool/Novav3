@@ -273,15 +273,29 @@ body {
   cursor: pointer;
 }
 
-/* Smooth node movement */
+/* Плавные переходы для всех нод */
 .react-flow__node {
-  transition: box-shadow 0.2s ease;
+  transition: transform 0.3s ease-in-out, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Плавные переходы для границ нод */
+.react-flow__node.selected {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Плавные переходы для соединений */
+.react-flow__edge path {
+  transition: stroke 0.2s ease, stroke-width 0.2s ease;
+}
+
+/* Плавное масштабирование содержимого */
+.react-flow__node>* {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Smooth node dragging - add easing when not dragging */
 .react-flow__node:not(.dragging) {
-  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.2s ease;
+  transition: transform 0.3s ease-in-out, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* Node being dragged - immediate response */
