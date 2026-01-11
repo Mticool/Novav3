@@ -46,7 +46,7 @@ export const TextNode = memo(({ id, data, selected }: NodeProps) => {
           <Type size={16} className="text-green-300/90" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-sm font-semibold text-white truncate node-text">{(nodeData?.title as string) || 'Текст'}</div>
+          <div className="text-sm font-semibold text-white truncate node-title">{(nodeData?.title as string) || 'Текст'}</div>
           <div className="text-xs text-white/40 node-detail">Промпт</div>
         </div>
       </div>

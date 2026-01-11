@@ -88,7 +88,7 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
       {/* Title (outside card) */}
       <div className="mb-2 flex items-center gap-2 text-xs text-white/60">
         <VideoIcon size={14} className="text-white/50" />
-        <span className="text-white/80 font-medium truncate node-text">{(nodeData?.title as string) || 'Генератор видео'}</span>
+        <span className="text-white/80 font-medium truncate node-title">{(nodeData?.title as string) || 'Генератор видео'}</span>
       </div>
 
       <div

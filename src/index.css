@@ -370,8 +370,16 @@ body {
 }
 
 /* ===========================================
-   ADAPTIVE LEVEL OF DETAIL (LOD)
+   ADAPTIVE LEVEL OF DETAIL (LOD) & RESPONSIVE
    =========================================== */
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .react-flow__node {
+    min-width: 150px !important;
+    font-size: 12px;
+  }
+}
 
 /* Transition for detail elements */
 .node-detail {
@@ -379,19 +387,31 @@ body {
 }
 
 /* Transitions for text elements */
-.node-text {
+.node-text,
+.node-title {
   transition: font-size 0.2s ease, opacity 0.2s ease;
 }
 
-/* Zoom Far (< 0.5) */
+/* Zoom Far (< 0.5) - Simplified View */
 .zoom-far .node-detail {
   opacity: 0;
   pointer-events: none;
+  display: none !important;
 }
 
-.zoom-far .node-text {
-  font-size: 0px !important;
-  opacity: 0;
+.zoom-far .node-text:not(.node-title) {
+  display: none;
+}
+
+.zoom-far .node-title {
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+.zoom-far .react-flow__node {
+  background: #0D0D0D !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 /* Zoom Mid (< 0.8) */

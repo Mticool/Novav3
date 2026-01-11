@@ -51,7 +51,7 @@ export const MasterPromptNode = memo(({ id, data, selected }: NodeProps) => {
         <input
           type="text"
           defaultValue={(nodeData?.title as string) || 'Master Prompt'}
-          className="flex-1 bg-transparent text-sm font-semibold text-white outline-none"
+          className="flex-1 bg-transparent text-sm font-semibold text-white outline-none node-title"
           onChange={(e) => updateNode(id, { title: e.target.value })}
         />
 
@@ -104,7 +104,7 @@ export const MasterPromptNode = memo(({ id, data, selected }: NodeProps) => {
           )}
         </div>
 
-        <div className="flex items-center justify-between text-xs">
+        <div className="flex items-center justify-between text-xs node-detail">
           <div className="flex items-center gap-2">
             <span className="text-white/30">{content.length} chars</span>
             {content.length > 0 && (
