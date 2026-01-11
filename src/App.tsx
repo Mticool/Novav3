@@ -107,7 +107,7 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
   useAutoSave(true);
 
   return (
-    <div className={`h-screen w-screen bg-canvas-bg flex ${zoomClass}`}>
+    <div className={`h-screen w-screen bg-canvas-bg flex overflow-hidden ${zoomClass}`}>
       {/* Onboarding */}
       <OnboardingTour />
 
