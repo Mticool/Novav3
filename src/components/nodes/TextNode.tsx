@@ -31,7 +31,7 @@ export const TextNode = memo(({ id, data, selected }: NodeProps) => {
       <Handle
         type="target"
         position={Position.Left}
-        className="!w-3 !h-3"
+        className="node-handle !-left-1.5"
       />
 
       {/* Header */}
@@ -128,7 +128,7 @@ export const TextNode = memo(({ id, data, selected }: NodeProps) => {
       <Handle
         type="source"
         position={Position.Right}
-        className="!w-3 !h-3"
+        className="node-handle !-right-1.5"
       />
     </div>
   );

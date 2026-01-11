@@ -120,44 +120,66 @@ body {
   animation: edge-pulse 1.5s ease-in-out infinite;
 }
 
+/* ===========================================
+   MINIMAL NODE HANDLES
+   =========================================== */
+
+/* Убираем стандартные стили React Flow */
 .react-flow__handle {
-  width: 22px !important;
-  height: 22px !important;
-  border: 2px solid rgba(255, 255, 255, 0.22) !important;
-  background: rgba(20, 20, 20, 0.9) !important;
-  border-radius: 12px !important;
-  transition: all 0.2s ease !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+  width: 12px !important;
+  height: 12px !important;
+  background: transparent !important;
+  border: none !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  color: rgba(255, 255, 255, 0.75) !important;
-  z-index: 100 !important;
+  z-index: 10 !important;
 }
 
-@media (pointer: coarse) {
-  .react-flow__handle {
-    width: 28px !important;
-    height: 28px !important;
-  }
+.node-handle {
+  /* Позиционирование */
+  width: 12px;
+  height: 12px;
+  background: transparent;
+  /* Сама зона прозрачная */
+  border: none;
+  border-radius: 50%;
+
+  /* Центрирование визуальной точки */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
 }
 
-.react-flow__handle:hover {
-  transform: scale(1.08);
-  border-color: rgba(255, 255, 255, 0.35) !important;
-  background: rgba(30, 30, 30, 0.95) !important;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.65) !important;
+/* Визуальная точка внутри (псевдо-элемент) */
+.node-handle::after {
+  content: '';
+  width: 6px;
+  /* Очень маленькая, аккуратная точка */
+  height: 6px;
+  background: #555;
+  /* Серый в покое */
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5);
+  /* Обводка под цвет фона ноды */
 }
 
-/* Разные цвета для типов */
-.react-flow__handle-left {
-  border-color: rgba(16, 185, 129, 0.35) !important;
-  /* вход */
+/* При наведении на ноду точки загораются */
+.node-card:hover .node-handle::after {
+  background: #fff;
+  /* Становятся белыми */
+  transform: scale(1.2);
+  /* Чуть увеличиваются */
 }
 
-.react-flow__handle-right {
-  border-color: rgba(59, 130, 246, 0.35) !important;
-  /* выход */
+/* При подключении */
+.node-handle.connected::after {
+  background: #A855F7;
+  /* Фиолетовый (цвет потока) */
 }
 
 /* ===========================================

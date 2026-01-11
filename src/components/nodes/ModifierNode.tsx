@@ -93,7 +93,7 @@ export const ModifierNode = memo(({ id, data, selected }: NodeProps) => {
       node-modifier
       ${selected ? 'selected' : ''}
     `}>
-      <Handle type="target" position={Position.Left} className="!w-3 !h-3" title="Connect from prompt" />
+      <Handle type="target" position={Position.Left} className="node-handle !-left-1.5" title="Connect from prompt" />
 
       {/* Header */}
       <div className="px-3 py-2 border-b border-white/5 flex items-center gap-2">
@@ -173,7 +173,7 @@ export const ModifierNode = memo(({ id, data, selected }: NodeProps) => {
         </div>
       </div>
 
-      <Handle type="source" position={Position.Right} className="!w-3 !h-3" title="Connect to generator" />
+      <Handle type="source" position={Position.Right} className="node-handle !-right-1.5" title="Connect to generator" />
     </div>
   );
 });

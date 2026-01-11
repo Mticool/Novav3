@@ -98,12 +98,8 @@ export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
         `}
       >
         {/* Side handles with mini icons */}
-        <Handle type="target" position={Position.Left} className="!absolute !-left-3 !top-1/2 !-translate-y-1/2">
-          <span className="text-[10px] font-bold">T</span>
-        </Handle>
-        <Handle type="source" position={Position.Right} className="!absolute !-right-3 !top-1/2 !-translate-y-1/2">
-          <ImageIcon size={12} />
-        </Handle>
+        <Handle type="target" position={Position.Left} className="node-handle !absolute !-left-1.5 !top-1/2 !-translate-y-1/2" />
+        <Handle type="source" position={Position.Right} className="node-handle !absolute !-right-1.5 !top-1/2 !-translate-y-1/2" />
 
         {/* Preview / Placeholder */}
         <div className="relative">

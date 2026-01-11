@@ -166,7 +166,7 @@ export const GeneratorNode = memo(({ id, data, selected }: NodeProps<GeneratorNo
       ${hasError ? 'ring-2 ring-red-500/50' : ''}
       ${isLoading ? 'opacity-80' : ''}
     `}>
-      <Handle type="target" position={Position.Left} className="!w-3 !h-3" title="Connect prompts" />
+      <Handle type="target" position={Position.Left} className="node-handle !-left-1.5" title="Connect prompts" />
 
       {/* Header */}
       <div className="px-3 py-2 border-b border-white/5 flex items-center gap-2">
@@ -354,7 +354,7 @@ export const GeneratorNode = memo(({ id, data, selected }: NodeProps<GeneratorNo
         )}
       </div>
 
-      <Handle type="source" position={Position.Right} className="!w-3 !h-3" title="Connect to next node" />
+      <Handle type="source" position={Position.Right} className="node-handle !-right-1.5" title="Connect to next node" />
     </div>
   );
 });

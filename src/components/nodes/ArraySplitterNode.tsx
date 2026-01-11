@@ -64,7 +64,7 @@ export const ArraySplitterNode = memo(({ id, data, selected }: NodeProps) => {
                 <Handle
                     type="target"
                     position={Position.Left}
-                    className="!w-3 !h-3 !bg-purple-500 !border-2 !border-purple-400/50"
+                    className="node-handle !-left-1.5"
                 />
 
                 {/* Header */}
@@ -121,7 +121,7 @@ export const ArraySplitterNode = memo(({ id, data, selected }: NodeProps) => {
                                     type="source"
                                     position={Position.Right}
                                     id={`output-${index}`}
-                                    className="!w-3 !h-3 !bg-cyan-500 !border-2 !border-cyan-400/50 !right-[-18px]"
+                                    className="node-handle !-right-1.5"
                                 />
                             </div>
                         );

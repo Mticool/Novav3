@@ -84,7 +84,7 @@ export const ImageUploadNode = memo(({ id, data, selected }: NodeProps) => {
                 <Handle
                     type="source"
                     position={Position.Right}
-                    className="!w-3 !h-3 !bg-cyan-500 !border-2 !border-cyan-400/50"
+                    className="node-handle !-right-1.5"
                 />
 
                 {imageUrl ? (

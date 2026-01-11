@@ -161,7 +161,7 @@ export const CameraNode = memo(({ id, data, selected }: NodeProps) => {
       <Handle
         type="target"
         position={Position.Left}
-        className="!w-4 !h-4 !bg-[#1a1a1a] !border-2 !border-white/20"
+        className="node-handle !-left-1.5"
       />
 
       {/* Header */}
@@ -288,7 +288,7 @@ export const CameraNode = memo(({ id, data, selected }: NodeProps) => {
       <Handle
         type="source"
         position={Position.Right}
-        className="!w-4 !h-4 !bg-[#1a1a1a] !border-2 !border-white/20"
+        className="node-handle !-right-1.5"
       />
     </div>
   );
