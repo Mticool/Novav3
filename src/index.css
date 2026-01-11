@@ -93,10 +93,23 @@ body {
 
 /* React Flow стили */
 .react-flow__edge-path {
-  /* Allow defaultEdgeOptions.style to drive base color/width */
+  stroke: #555;
+  /* Базовый цвет (темно-серый) */
+  stroke-width: 1.5px;
+  /* Очень тонкая линия, а не толстый кабель */
+  stroke-opacity: 0.6;
   stroke-linecap: round;
   stroke-linejoin: round;
   transition: all 0.2s ease;
+}
+
+/* Активная или выделенная связь */
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #fff !important;
+  stroke-width: 2px !important;
+  stroke-opacity: 1 !important;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+  /* Эффект неона */
 }
 
 /* Animated edge during execution */
@@ -266,11 +279,7 @@ body {
   color: white !important;
 }
 
-/* Selected edge highlight */
-.react-flow__edge.selected .react-flow__edge-path {
-  stroke: #3b82f6 !important;
-  stroke-width: 3px !important;
-}
+/* Selected edge highlight removed - now handled in main edge-path definition */
 
 /* Node selection state */
 .react-flow__node.selected {
@@ -360,8 +369,8 @@ body {
 }
 
 .react-flow__edge:hover .edge-hoverable {
-  stroke: #3b82f6 !important;
-  stroke-width: 3px !important;
+  stroke: #fff !important;
+  stroke-width: 2px !important;
   transition: all 0.2s ease;
 }
 
