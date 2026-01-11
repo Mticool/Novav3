@@ -64,6 +64,33 @@ export function LandingPage() {
         { icon: FastForward, title: 'Speed of Light', desc: 'Оптимизировано для минимальной задержки между идеей и финалом.' }
     ];
 
+    const faq = [
+        { q: 'Что такое Novav3?', a: 'Novav3 — это профессиональная визуальная среда для создания AI-контента. Мы объединяем лучшие модели (Sora, Flux, Kling) в единый рабочий процесс.' },
+        { q: 'Нужны ли мне свои API ключи?', a: 'Нет, всё уже настроено. Вы получаете доступ к мощностям через нашу платформу в режиме «всё включено».' },
+        { q: 'Можно ли использовать для коммерции?', a: 'Конечно. Весь созданный контент принадлежит вам и может быть использован в любых коммерческих целях.' }
+    ];
+
+    const pricing = [
+        { name: 'Beta Starter', price: '$0', desc: 'Для первых шагов в AI продакшене', features: ['50 генераций в месяц', 'Sora 2.0 (Lite)', '4K Экспорт'] },
+        { name: 'Creator Pro', price: '$29', desc: 'Для профессиональных криэйторов', features: ['Безлимитные генерации', 'Приоритетный доступ', 'API интеграция'], active: true },
+        { name: 'Studio Elite', price: '$99', desc: 'Для студий и команд', features: ['Кастомные воркфлоу', 'Высшее качество 8K', 'Личный менеджер'] }
+    ];
+
+    const models = [
+        { name: 'Sora 2.0', company: 'OpenAI', type: 'Video', color: 'text-blue-400' },
+        { name: 'Kling 2.6', company: 'Kuaishou', type: 'Video', color: 'text-purple-400' },
+        { name: 'Flux Pro', company: 'Black Forest', type: 'Image', color: 'text-yellow-400' },
+        { name: 'Luma DM', company: 'Luma AI', type: 'Video', color: 'text-red-400' },
+        { name: 'Stable Diffusion 3', company: 'Stability', type: 'Image', color: 'text-emerald-400' }
+    ];
+
+    const gallery = [
+        { url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80', title: 'Abstract Flow' },
+        { url: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=800&q=80', title: 'Cyberpunk Era' },
+        { url: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=800&q=80', title: 'Liquid Gold' },
+        { url: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&q=80', title: 'Digital Soul' }
+    ];
+
     return (
         <div className="min-h-screen w-full bg-[#050505] text-white flex flex-col overflow-x-hidden selection:bg-[#EFFE17] selection:text-black">
             {/* Background */}
@@ -88,6 +115,7 @@ export function LandingPage() {
                         <a href="#features" className="hover:text-[#EFFE17] transition-colors">Функции</a>
                         <a href="#workflow" className="hover:text-[#EFFE17] transition-colors">Воркфлоу</a>
                         <a href="#models" className="hover:text-[#EFFE17] transition-colors">Модели</a>
+                        <a href="#pricing" className="hover:text-[#EFFE17] transition-colors">Тарифы</a>
                     </div>
                     <button onClick={handleCreate} className="px-8 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all duration-300 text-xs font-black uppercase tracking-widest backdrop-blur-md">
                         Войти в систему
@@ -192,6 +220,98 @@ export function LandingPage() {
                                 </div>
                                 <h4 className="text-xl font-black uppercase tracking-tight mb-4">{cap.title}</h4>
                                 <p className="text-white/30 font-bold leading-relaxed">{cap.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* Model Ecosystem */}
+                <section id="models" className="w-full mt-60 py-20 px-8 bg-white/[0.02] border-y border-white/5 relative">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-[#EFFE17]/20 to-transparent" />
+                    <div className="max-w-[1200px] mx-auto">
+                        <div className="flex flex-col md:flex-row justify-between items-end gap-10 mb-20">
+                            <div className="max-w-xl">
+                                <h2 className="text-4xl lg:text-6xl font-black tracking-tighter mb-6 uppercase">Экосистема <br /> топовых моделей</h2>
+                                <p className="text-white/40 text-lg font-bold">Мы объединили лучшие API мира. Переключайтесь между ними за секунды или соединяйте их в одну цепочку.</p>
+                            </div>
+                            <div className="flex gap-4">
+                                <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-[#EFFE17]">Enterprise Ready</div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                            {models.map((model, i) => (
+                                <div key={i} className="p-6 bg-black border border-white/5 rounded-[24px] hover:border-[#EFFE17]/30 transition-all group">
+                                    <div className={`text-xs font-black uppercase tracking-widest mb-4 opacity-50 group-hover:opacity-100 ${model.color}`}>{model.type}</div>
+                                    <h4 className="text-xl font-black tracking-tight mb-1">{model.name}</h4>
+                                    <p className="text-[10px] text-white/30 font-bold uppercase tracking-widest">{model.company}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                {/* Showcase Gallery */}
+                <section className="w-full mt-60 mb-20">
+                    <div className="text-center mb-24">
+                        <h2 className="text-5xl lg:text-7xl font-black tracking-tighter mb-6">Создано в Novav3</h2>
+                        <p className="text-white/40 text-xl font-bold max-w-2xl mx-auto">Галерея работ наших пользователей. Реальные результаты реальных воркфлоу.</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {gallery.map((item, i) => (
+                            <div key={i} className="aspect-[4/5] rounded-[32px] overflow-hidden border border-white/10 relative group">
+                                <img src={item.url} alt={item.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-8">
+                                    <div>
+                                        <div className="text-xs font-black text-[#EFFE17] uppercase tracking-widest mb-2">Showcase</div>
+                                        <h4 className="text-xl font-black text-white uppercase tracking-tight">{item.title}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="mt-16 text-center">
+                        <button className="px-10 py-5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all">
+                            Посмотреть все работы
+                        </button>
+                    </div>
+                </section>
+
+                {/* Pricing Tiers */}
+                <section id="pricing" className="w-full mt-60 py-20">
+                    <div className="text-center mb-24">
+                        <h2 className="text-5xl lg:text-7xl font-black tracking-tighter mb-6 uppercase">Выберите свой <br /> масштаб</h2>
+                        <p className="text-white/40 text-xl font-bold max-w-2xl mx-auto">Прозрачные условия для любых задач. Творите без ограничений.</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {pricing.map((plan, i) => (
+                            <div key={i} className={`p-10 rounded-[40px] border flex flex-col ${plan.active ? 'bg-[#EFFE17] border-[#EFFE17] text-black' : 'bg-[#0A0A0A] border-white/5 text-white'}`}>
+                                <h4 className="text-2xl font-black uppercase tracking-tight mb-2">{plan.name}</h4>
+                                <p className={`text-sm font-bold mb-8 ${plan.active ? 'text-black/60' : 'text-white/40'}`}>{plan.desc}</p>
+                                <div className="text-5xl font-black mb-10">{plan.price}<span className="text-lg opacity-40">/мес</span></div>
+                                <div className="space-y-4 mb-12 flex-1">
+                                    {plan.features.map((f, fi) => (
+                                        <div key={fi} className="flex items-center gap-3 text-sm font-bold italic">
+                                            <Sparkles size={14} className={plan.active ? 'text-black/30' : 'text-[#EFFE17]'} />
+                                            {f}
+                                        </div>
+                                    ))}
+                                </div>
+                                <button className={`w-full py-5 rounded-[20px] font-black text-xs uppercase tracking-widest transition-all ${plan.active ? 'bg-black text-white hover:scale-105' : 'bg-white/5 hover:bg-white/10 border border-white/10'}`}>
+                                    Выбрать план
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* FAQ Section */}
+                <section className="w-full mt-60 mb-60 max-w-4xl mx-auto px-8">
+                    <h2 className="text-5xl font-black tracking-tighter mb-16 text-center uppercase">FAQ</h2>
+                    <div className="space-y-6">
+                        {faq.map((item, i) => (
+                            <div key={i} className="p-8 bg-[#0A0A0A] border border-white/5 rounded-[32px] group hover:border-white/20 transition-all">
+                                <h4 className="text-xl font-black uppercase tracking-tight mb-4 group-hover:text-[#EFFE17] transition-colors">{item.q}</h4>
+                                <p className="text-white/40 font-bold leading-relaxed">{item.a}</p>
                             </div>
                         ))}
                     </div>
