@@ -1,117 +1,52 @@
-# 🤖 AI Integration Setup
+# 🤖 AI Integration & Setup Guide
 
-## Шаг 1: Создай .env файл
+Novav3 uses a hybrid AI architecture to provide the best generation quality and speed.
 
-В корне проекта создай файл `.env` (он уже в .gitignore):
+## 🔑 Required API Keys
+
+To use all features, you need to configure the following environment variables in your `.env` file:
 
 ```env
-# OpenAI API Key для улучшения промптов
+# 1. Kie.ai (Primary Generation Engine)
+# Get from: https://kie.ai
+VITE_KIE_KEY=your_kie_key_here
+
+# 2. OpenAI (Smart Prompt Enhancement)
+# Get from: https://platform.openai.com
 VITE_OPENAI_API_KEY=your_openai_key_here
-
-# Fal.ai API Key для генерации изображений и видео
-VITE_FAL_KEY=your_fal_key_here
 ```
 
-## Шаг 2: Перезапусти dev server
+## 🚀 Setup Steps
 
-```bash
-# Останови текущий сервер (Ctrl+C)
-# Затем запусти снова:
-npm run dev
-```
+1. **Create `.env` file**: Copy `.env.example` or create a new one in the root directory.
+2. **Add Your Keys**: Paste your keys from the providers above.
+3. **Restart Server**:
+   ```bash
+   npm run dev
+   ```
 
-## Шаг 3: Протестируй AI генерацию!
+## 🎯 How to Generate
 
-### ✨ Улучшение промпта (OpenAI GPT-4)
-1. Создай **Text Node**
-2. Введи промпт: "a cat"
-3. Кликни **"Improve with AI"**
-4. Промпт станет детальнее: "A majestic cat with fluffy fur, sitting gracefully..."
+### ✨ Smart Prompt (OpenAI)
+- Add a **Text Node** and enter a simple idea (e.g., "A neon car").
+- Connect it to a **Master Prompt (Помощник)** node.
+- Click **"Improve with AI"**. The AI will expand your prompt for better results.
 
-### 🖼️ Генерация изображения (Fal.ai Flux)
-1. Создай **Text Node** с промптом
-2. Создай **Image Node**
-3. Соедини: Text → Image
-4. Кликни **"Generate Image"** в Image Node
-5. Через 2-5 секунд появится изображение!
+### 🖼️ HQ Images (Kie.ai - Flux Pro)
+- Connect a **Text Node** to an **Image Node**.
+- Select **"Flux Pro"** or **"GPT Image"** in settings.
+- Click **"Generate Image"**.
 
-### 🎥 Генерация видео (Fal.ai Luma)
-**Вариант 1: Из изображения**
-1. Создай **Image Node** с сгенерированным изображением
-2. Создай **Video Node**
-3. Соедини: Image → Video
-4. Кликни **"Generate Video"**
-5. Через 30-60 секунд появится видео!
+### 🎥 Pro Video (Kie.ai - Sora 2 / Kling 2.6)
+- **Text-to-Video**: Connect **Text Node** → **Video Node**.
+- **Image-to-Video**: Connect **Image Node** (with result) → **Video Node**.
+- Select **"Sora 2"** or **"Kling 2.6"** for cinematic results.
 
-**Вариант 2: Из текста**
-1. Создай **Text Node** с промптом
-2. Создай **Video Node**
-3. Соедини: Text → Video
-4. Кликни **"Generate Video"**
+## 🔐 Security Note
+- Your keys are stored locally in `.env` and are never committed to Git.
+- In the browser, keys are cached in `localStorage` for convenience but remain on your device.
 
-## 🎯 Примеры промптов
-
-### Для изображений:
-```
-a futuristic city at sunset, cyberpunk style, neon lights, 8k
-a magical forest with glowing mushrooms, fantasy art
-portrait of a robot artist painting, studio lighting
-```
-
-### Для видео:
-```
-camera slowly zooming into a magical portal
-waves crashing on a beach at golden hour
-time lapse of flowers blooming
-```
-
-## 🔐 Безопасность
-
-⚠️ **ВАЖНО**: Файл `.env` уже добавлен в `.gitignore`!
-- НЕ коммить .env в git
-- НЕ делиться API ключами
-- Для продакшена используй backend API
-
-## 📊 API Лимиты
-
-### OpenAI:
-- GPT-4: ~$0.03 за 1K токенов
-- Лимит: зависит от твоего аккаунта
-
-### Fal.ai:
-- Flux Schnell (image): ~$0.003 за изображение
-- Luma Dream Machine (video): ~$0.05 за видео
-- Проверь баланс: https://fal.ai/dashboard
-
-## 🐛 Troubleshooting
-
-### "API key not found"
-- Проверь, что `.env` файл создан
-- Перезапусти dev server
-- Проверь, что ключи правильные
-
-### "Rate limit exceeded"
-- Подожди 1 минуту
-- Проверь квоты на https://platform.openai.com/usage
-
-### "Generation failed"
-- Проверь консоль браузера (F12)
-- Проверь промпт (не пустой?)
-- Проверь, что ноды связаны
-
-## 🚀 Что работает:
-
-✅ OpenAI GPT-4 для улучшения промптов
-✅ Fal.ai Flux Schnell для генерации изображений
-✅ Fal.ai Luma Dream Machine для генерации видео
-✅ Loading states со спиннерами
-✅ Error handling с сообщениями
-✅ Progress indicators
-
-## 📚 Документация:
-
-- OpenAI API: https://platform.openai.com/docs
-- Fal.ai Models: https://fal.ai/models
-- Flux Schnell: https://fal.ai/models/fal-ai/flux/schnell
-- Luma Dream Machine: https://fal.ai/models/fal-ai/luma-dream-machine
+## 📊 Recommendations
+- **Kie.ai**: Best for high-end cinematic video and character consistency.
+- **OpenAI**: Essential for complex, multi-layered visual prompts.
 

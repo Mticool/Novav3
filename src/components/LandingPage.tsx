@@ -85,10 +85,14 @@ export function LandingPage() {
     ];
 
     const gallery = [
-        { url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80', title: 'Abstract Flow' },
-        { url: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=800&q=80', title: 'Cyberpunk Era' },
-        { url: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=800&q=80', title: 'Liquid Gold' },
-        { url: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&q=80', title: 'Digital Soul' }
+        { url: '/src/assets/realistic_portrait_1768127293985.png', title: 'Hyper-Realistic Portrait', category: 'Portrait' },
+        { url: 'https://images.unsplash.com/photo-1600585154340-be6199f7e099?w=800&q=80', title: 'Modern Sunset Villa', category: 'Architecture' },
+        { url: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&q=80', title: 'Luxury Scent No. 3', category: 'Product' },
+        { url: 'https://images.unsplash.com/photo-1488161628813-04460f892d73?w=800&q=80', title: 'Milanese Street Style', category: 'Fashion' },
+        { url: '/src/assets/biolume_owl_1768126981979.png', title: 'Biolume Cyber Owl', category: 'Stylized' },
+        { url: '/src/assets/mecha_tiger_1768127012005.png', title: 'Mecha Tiger Pulse', category: 'Stylized' },
+        { url: '/src/assets/liquid_gold_abstract_1768126995520.png', title: 'Zero-G Liquid Gold', category: 'Abstract' },
+        { url: '/src/assets/cyber_sphere_1768126968855.png', title: 'Neon Oasis Sphere', category: 'Abstract' }
     ];
 
     return (
@@ -98,8 +102,9 @@ export function LandingPage() {
                 style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '24px 24px' }}
             />
             <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[150px]" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#EFFE17]/5 rounded-full blur-[150px]" />
+                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[150px] animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#EFFE17]/5 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '1s' }} />
+                <div className="absolute top-1/2 left-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-[#EFFE17]/20 to-transparent -translate-y-1/2 opacity-30" />
             </div>
 
             {/* Navigation */}
@@ -250,6 +255,47 @@ export function LandingPage() {
                     </div>
                 </section>
 
+                {/* Model Spotlight: Nano Banana Pro */}
+                <section className="w-full mt-60 py-32 px-8 relative overflow-hidden rounded-[60px] border border-[#EFFE17]/10 bg-[#080808]">
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#EFFE17]/5 blur-[120px] rounded-full -translate-x-1/2 -translate-y-1/2" />
+                    <div className="relative z-10 flex flex-col lg:flex-row items-center gap-20">
+                        <div className="lg:w-1/2">
+                            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EFFE17]/10 border border-[#EFFE17]/20 mb-8">
+                                <Sparkles size={14} className="text-[#EFFE17]" />
+                                <span className="text-[10px] font-black tracking-[0.2em] uppercase text-[#EFFE17]">Most Powerful AI</span>
+                            </motion.div>
+                            <h2 className="text-5xl lg:text-8xl font-black tracking-tighter mb-8 italic leading-[0.9]">Nano Banana <br /><span className="text-[#EFFE17]">Pro 1.5</span></h2>
+                            <p className="text-white/40 text-xl font-bold mb-12 max-w-lg">
+                                Наша передовая модель Nano Banana Pro устанавливает новые стандарты качества в генерации изображений.
+                                Максимальная детализация, понимание сложных промптов и фотореалистичный рендеринг.
+                            </p>
+                            <div className="grid grid-cols-2 gap-8">
+                                <div>
+                                    <div className="text-4xl font-black text-white mb-2">99.9%</div>
+                                    <div className="text-xs uppercase tracking-widest text-white/30 font-bold">Accuracy rate</div>
+                                </div>
+                                <div>
+                                    <div className="text-4xl font-black text-white mb-2">~1.2s</div>
+                                    <div className="text-xs uppercase tracking-widest text-white/30 font-bold">Generation speed</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="lg:w-1/2 relative group">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-[#EFFE17]/20 to-blue-500/20 rounded-[40px] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                            <motion.div
+                                whileHover={{ scale: 1.02 }}
+                                className="relative bg-black rounded-[40px] overflow-hidden border border-white/10"
+                            >
+                                <img src="/src/assets/biolume_owl_1768126981979.png" alt="Nano Banana Pro Example" className="w-full h-full object-cover aspect-square" />
+                                <div className="absolute bottom-6 left-6 p-4 bg-black/60 backdrop-blur-md rounded-2xl border border-white/10">
+                                    <div className="text-[10px] font-black uppercase tracking-widest text-[#EFFE17] mb-1">Generated Sample</div>
+                                    <div className="text-xs text-white/80 font-bold italic">"Cybernetic Owl with Fractal Feathers"</div>
+                                </div>
+                            </motion.div>
+                        </div>
+                    </div>
+                </section>
+
                 {/* Showcase Gallery */}
                 <section className="w-full mt-60 mb-20">
                     <div className="text-center mb-24">
@@ -262,7 +308,7 @@ export function LandingPage() {
                                 <img src={item.url} alt={item.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-8">
                                     <div>
-                                        <div className="text-xs font-black text-[#EFFE17] uppercase tracking-widest mb-2">Showcase</div>
+                                        <div className="text-xs font-black text-[#EFFE17] uppercase tracking-widest mb-2">{item.category}</div>
                                         <h4 className="text-xl font-black text-white uppercase tracking-tight">{item.title}</h4>
                                     </div>
                                 </div>

@@ -48,7 +48,11 @@ const HeroVideoNode = () => (
             </div>
             <div className="flex justify-between text-[9px] font-bold uppercase tracking-widest">
                 <span className="text-white/30">Status</span>
-                <span className="text-purple-400">Generating...</span>
+                <span className="text-[#EFFE17]">Render Complete</span>
+            </div>
+            <div className="aspect-video w-full rounded-xl overflow-hidden border border-white/10 relative group">
+                <img src="/src/assets/realistic_portrait_1768127293985.png" alt="Generation Result" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-[#EFFE17]/10 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
         </div>
         <Handle type="target" position={Position.Left} className="w-3 h-3 bg-white/20 border-2 border-black !-left-1.5" />

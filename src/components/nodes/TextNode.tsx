@@ -24,13 +24,9 @@ export const TextNode = memo(({ id, data, selected }: NodeProps) => {
     <div
       data-state={(nodeData?.state as string) || 'idle'}
       className={`
-        min-w-[380px] w-[380px]
-        bg-[#0D0D0D]
-        rounded-[28px]
+        custom-node
+        min-w-[320px] w-[380px]
         overflow-hidden
-        transition-all duration-200
-        shadow-xl shadow-black/70
-        border border-white/10
         ${selected ? 'ring-2 ring-accent-neon/40 shadow-2xl shadow-accent-neon/10' : ''}
       `}
     >

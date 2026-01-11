@@ -55,14 +55,10 @@ export const ArraySplitterNode = memo(({ id, data, selected }: NodeProps) => {
 
             <div
                 className={`
+          custom-node
           relative
-          bg-[#0D0D0D]
-          rounded-[28px]
           overflow-visible
-          transition-all duration-200
-          shadow-xl shadow-black/70
-          border
-          ${selected ? 'ring-2 ring-accent-neon/40 shadow-2xl shadow-accent-neon/10 border-accent-neon/30' : 'border-white/10'}
+          ${selected ? 'ring-2 ring-accent-neon/40 shadow-2xl shadow-accent-neon/10 border-accent-neon/30' : ''}
         `}
             >
                 {/* Input handle */}

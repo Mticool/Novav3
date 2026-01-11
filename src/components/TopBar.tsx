@@ -12,6 +12,10 @@ export function TopBar() {
   const [showTemplates, setShowTemplates] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
+  // Local state for API keys to allow trimming before save
+  const [openaiKeyLocal, setOpenaiKeyLocal] = useState(localStorage.getItem('openai_api_key') || '');
+  const [kieKeyLocal, setKieKeyLocal] = useState(localStorage.getItem('kie_api_key') || '');
+
   const handleNewWorkflow = () => {
     if (confirm('Вы уверены? Текущий проект будет очищен.')) {
       clearWorkflow();
@@ -37,24 +41,35 @@ export function TopBar() {
                 <label className="block text-xs text-white/50 mb-2">OpenAI API Key</label>
                 <input
                   type="password"
-                  defaultValue={localStorage.getItem('openai_api_key') || ''}
-                  onChange={(e) => localStorage.setItem('openai_api_key', e.target.value)}
+                  value={openaiKeyLocal}
+                  onChange={(e) => setOpenaiKeyLocal(e.target.value)}
                   className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
                   placeholder="sk-..."
+                  onClick={(e) => e.stopPropagation()}
                 />
               </div>
               <div>
                 <label className="block text-xs text-white/50 mb-2">Kie.ai API Key</label>
                 <input
                   type="password"
-                  defaultValue={localStorage.getItem('kie_api_key') || ''}
-                  onChange={(e) => localStorage.setItem('kie_api_key', e.target.value)}
+                  value={kieKeyLocal}
+                  onChange={(e) => setKieKeyLocal(e.target.value)}
                   className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm"
                   placeholder="kie_..."
+                  onClick={(e) => e.stopPropagation()}
                 />
               </div>
               <button
-                onClick={() => { window.location.reload(); }}
+                onClick={() => {
+                  const trimmedOpenAI = openaiKeyLocal.trim();
+                  const trimmedKie = kieKeyLocal.trim();
+
+                  if (trimmedOpenAI) localStorage.setItem('openai_api_key', trimmedOpenAI);
+                  if (trimmedKie) localStorage.setItem('kie_api_key', trimmedKie);
+
+                  alert('Настройки сохранены! Приложение будет перезагружено.');
+                  window.location.reload();
+                }}
                 className="w-full py-2 bg-accent-neon text-black font-medium rounded-lg text-sm"
               >
                 Сохранить и перезагрузить

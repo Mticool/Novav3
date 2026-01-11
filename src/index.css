@@ -160,6 +160,65 @@ body {
   /* выход */
 }
 
+/* ===========================================
+   TAPNOW AESTHETIC & MODULAR NODES
+   =========================================== */
+
+/* Diamond/Diagonal grid background */
+.react-flow__pane {
+  background: #0a0a0a !important;
+  background-image:
+    repeating-linear-gradient(45deg,
+      transparent,
+      transparent 50px,
+      rgba(255, 255, 255, 0.02) 50px,
+      rgba(255, 255, 255, 0.02) 51px),
+    repeating-linear-gradient(-45deg,
+      transparent,
+      transparent 50px,
+      rgba(255, 255, 255, 0.02) 50px,
+      rgba(255, 255, 255, 0.02) 51px) !important;
+}
+
+/* Base custom node style */
+.custom-node {
+  min-width: 320px;
+  border-radius: 12px;
+  background: #1a1a1a;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  padding: 12px;
+  transition: all 0.2s ease;
+}
+
+/* Node height variants */
+.node-small {
+  height: 50px;
+}
+
+.node-medium {
+  height: 100px;
+}
+
+.node-large {
+  height: 250px;
+}
+
+.node-xlarge {
+  height: 300px;
+}
+
+/* Selection & Hover */
+.custom-node:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.react-flow__node.selected .custom-node,
+.react-flow__node.selected {
+  border-color: #00fff2 !important;
+  box-shadow: 0 0 0 2px rgba(0, 255, 242, 0.2) !important;
+}
+
 .react-flow__controls {
   background: rgba(26, 26, 26, 0.95) !important;
   border: 1px solid rgba(255, 255, 255, 0.05) !important;

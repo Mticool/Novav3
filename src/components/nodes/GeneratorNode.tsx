@@ -160,11 +160,10 @@ export const GeneratorNode = memo(({ id, data, selected }: NodeProps<GeneratorNo
 
   return (
     <div className={`
+      custom-node
       node-generator
-      min-w-[280px] max-w-[380px]
-      bg-[#2d2d2d] rounded-[28px] overflow-hidden
-      transition-all duration-200
-      shadow-xl shadow-black/60
+      min-w-[320px] max-w-[400px]
+      overflow-hidden
       ${selected ? 'ring-2 ring-cyan-400 shadow-2xl shadow-cyan-500/40' : ''}
       ${hasError ? 'ring-2 ring-red-500/50' : ''}
       ${isLoading ? 'opacity-80' : ''}

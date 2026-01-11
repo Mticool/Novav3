@@ -60,16 +60,19 @@ const KIE_BASE_URL = 'https://api.kie.ai/api/v1';
 // ==================== API KEY MANAGEMENT ====================
 
 const getOpenAIKey = () => {
-  return localStorage.getItem('openai_api_key') || import.meta.env.VITE_OPENAI_API_KEY || '';
+  const key = localStorage.getItem('openai_api_key') || import.meta.env.VITE_OPENAI_API_KEY || '';
+  return key.trim();
 };
 
 const getKieKey = () => {
-  return localStorage.getItem('kie_api_key') || import.meta.env.VITE_KIE_KEY || '';
+  const key = localStorage.getItem('kie_api_key') || import.meta.env.VITE_KIE_KEY || '';
+  return key.trim();
 };
 
 // Deprecated: For backwards compatibility
 const getFalKey = () => {
-  return localStorage.getItem('fal_api_key') || import.meta.env.VITE_FAL_KEY || '';
+  const key = localStorage.getItem('fal_api_key') || import.meta.env.VITE_FAL_KEY || '';
+  return key.trim();
 };
 
 // ==================== OPENAI INITIALIZATION ====================
@@ -360,15 +363,15 @@ class KieClient {
 // ==================== PUBLIC API FUNCTIONS ====================
 
 export function updateApiKeys(openaiKey?: string, kieKey?: string, falKey?: string) {
-  if (openaiKey) {
-    localStorage.setItem('openai_api_key', openaiKey);
+  if (openaiKey !== undefined) {
+    localStorage.setItem('openai_api_key', openaiKey.trim());
     initOpenAI();
   }
-  if (kieKey) {
-    localStorage.setItem('kie_api_key', kieKey);
+  if (kieKey !== undefined) {
+    localStorage.setItem('kie_api_key', kieKey.trim());
   }
-  if (falKey) {
-    localStorage.setItem('fal_api_key', falKey);
+  if (falKey !== undefined) {
+    localStorage.setItem('fal_api_key', falKey.trim());
   }
 }
 

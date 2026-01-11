@@ -60,7 +60,7 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
       items: [
         {
           icon: Wand2,
-          label: 'Улучшение качества изображений',
+          label: 'Улучшение качества',
           subtitle: 'Upscale & enhance',
           badge: 'PRO',
           badgeColor: 'bg-orange-500/20 text-orange-400',
@@ -81,14 +81,6 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
           type: 'modifier' as const
         },
         {
-          icon: Upload,
-          label: 'Загрузка изображения',
-          subtitle: 'Входное изображение',
-          badge: 'NEW',
-          badgeColor: 'bg-cyan-500/20 text-cyan-400',
-          type: 'imageUpload' as const
-        },
-        {
           icon: SplitSquareHorizontal,
           label: 'Array Splitter',
           subtitle: 'Разделение на список',
@@ -96,11 +88,17 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
           badgeColor: 'bg-cyan-500/20 text-cyan-400',
           type: 'arraySplitter' as const
         },
+        {
+          icon: Type,
+          label: 'Комментарий',
+          subtitle: 'Заметки на холсте',
+          type: 'comment' as const
+        },
       ]
     },
   ];
 
-  const handleAddNode = (type: 'text' | 'image' | 'video' | 'masterPrompt' | 'modifier' | 'generator' | 'camera' | 'imageUpload' | 'arraySplitter') => {
+  const handleAddNode = (type: 'text' | 'image' | 'video' | 'masterPrompt' | 'modifier' | 'generator' | 'camera' | 'imageUpload' | 'arraySplitter' | 'comment') => {
     addNode(type);
     onClose();
   };

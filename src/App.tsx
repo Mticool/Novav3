@@ -23,7 +23,9 @@ import { ToastContainer } from './components/Toast';
 import { LibraryPanel } from './components/LibraryPanel';
 import { HistoryPanel } from './components/HistoryPanel';
 import { OnboardingTour } from './components/OnboardingTour';
+import { ApiKeyPrompt } from './components/ApiKeyPrompt';
 import { useStore } from './store/useStore';
+import { hasApiKeys, updateApiKeys } from './lib/api';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useAutoSave } from './hooks/useAutoSave';
 
@@ -54,8 +56,18 @@ function App() {
     return <LandingPage />;
   }
 
+  const keys = hasApiKeys();
+
   return (
     <ReactFlowProvider>
+      {!keys.hasKie && (
+        <ApiKeyPrompt
+          onSave={(openai, kie) => {
+            updateApiKeys(openai, kie);
+            window.location.reload();
+          }}
+        />
+      )}
       <FlowEditor
         nodes={nodes}
         edges={edges}

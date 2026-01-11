@@ -21,12 +21,10 @@ export const CommentNode = memo(({ id, data, selected }: NodeProps) => {
     return (
         <div
             className={`
+        custom-node
         min-w-[200px] max-w-[320px]
-        px-4 py-3
         bg-amber-500/20
         border border-amber-500/40
-        rounded-[24px]
-        transition-all duration-200
         ${selected ? 'ring-2 ring-amber-400/50 shadow-lg shadow-amber-500/20' : ''}
       `}
         >
