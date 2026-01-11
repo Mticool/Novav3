@@ -2,6 +2,7 @@ import { ReactFlow, Background, MiniMap, ReactFlowProvider, ConnectionLineType, 
 import '@xyflow/react/dist/style.css';
 import { useState, useEffect } from 'react';
 import { CanvasEmptyState } from './components/CanvasEmptyState';
+import { LandingPage } from './components/LandingPage';
 
 import { ImageNode } from './components/nodes/ImageNode';
 import { TextNode } from './components/nodes/TextNode';
@@ -50,6 +51,7 @@ function App() {
   const onEdgesChange = useStore((state) => state.onEdgesChange);
   const onConnect = useStore((state) => state.onConnect);
   const addNodeAt = useStore((state) => state.addNodeAt);
+  const view = useStore((state) => state.view);
 
   const [rf, setRf] = useState<ReactFlowInstance | null>(null);
   const [connectStart, setConnectStart] = useState<{
@@ -95,6 +97,10 @@ function App() {
 
   // Auto-save
   useAutoSave(true);
+
+  if (view === 'landing') {
+    return <LandingPage />;
+  }
 
   return (
     <div className="h-screen w-screen bg-canvas-bg flex">

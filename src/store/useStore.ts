@@ -21,8 +21,10 @@ interface StoreState {
   edges: Edge[];
   projectName: string;
   credits: number;
+  view: 'landing' | 'editor';
 
   // Actions
+  setView: (view: 'landing' | 'editor') => void;
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
@@ -163,6 +165,10 @@ export const useStore = create<StoreState>()((set, get) => ({
   ],
   projectName: 'UGC Косметика — Yves Rocher',
   credits: 285,
+  view: 'landing',
+
+  // Actions
+  setView: (view: 'landing' | 'editor') => set({ view }),
 
   // React Flow callbacks
   onNodesChange: (changes: NodeChange[]) => {
