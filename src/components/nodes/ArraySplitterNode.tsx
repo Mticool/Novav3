@@ -55,10 +55,9 @@ export const ArraySplitterNode = memo(({ id, data, selected }: NodeProps) => {
 
             <div
                 className={`
-          custom-node
+          node-card
           relative
-          overflow-visible
-          ${selected ? 'ring-2 ring-accent-neon/40 shadow-2xl shadow-accent-neon/10 border-accent-neon/30' : ''}
+          ${selected ? 'selected' : ''}
         `}
             >
                 {/* Input handle */}

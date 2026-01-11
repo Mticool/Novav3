@@ -71,11 +71,10 @@ export const ImageUploadNode = memo(({ id, data, selected }: NodeProps) => {
 
             <div
                 className={`
-          custom-node
+          node-card
           relative
-          overflow-hidden
-          ${isDragging ? 'border-accent-neon/50 bg-accent-neon/5' : ''}
-          ${selected ? 'ring-2 ring-accent-neon/40 shadow-2xl shadow-accent-neon/10' : ''}
+          ${isDragging ? 'bg-accent-neon/5' : ''}
+          ${selected ? 'selected' : ''}
         `}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}

@@ -29,11 +29,9 @@ export const MasterPromptNode = memo(({ id, data, selected }: NodeProps) => {
 
   return (
     <div className={`
-      custom-node
+      node-card
       node-master
-      min-w-[320px] max-w-[400px]
-      overflow-hidden
-      ${selected ? 'ring-2 ring-purple-400 shadow-2xl shadow-purple-500/40' : ''}
+      ${selected ? 'selected' : ''}
       ${isImproving ? 'opacity-80' : ''}
     `}>
       <Handle

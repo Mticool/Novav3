@@ -89,11 +89,9 @@ export const ModifierNode = memo(({ id, data, selected }: NodeProps) => {
 
   return (
     <div className={`
-      custom-node
+      node-card
       node-modifier
-      min-w-[320px] max-w-[380px]
-      overflow-hidden
-      ${selected ? `ring-2 ${colorClass} shadow-2xl` : ''}
+      ${selected ? 'selected' : ''}
     `}>
       <Handle type="target" position={Position.Left} className="!w-3 !h-3" title="Connect from prompt" />
 

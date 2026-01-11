@@ -180,43 +180,51 @@ body {
       rgba(255, 255, 255, 0.02) 51px) !important;
 }
 
-/* Base custom node style */
-.custom-node {
-  min-width: 320px;
-  border-radius: 12px;
-  background: #1a1a1a;
-  border: 2px solid rgba(255, 255, 255, 0.08);
-  padding: 12px;
-  transition: all 0.2s ease;
+/* Base node card style (Glassmorphism) */
+.node-card {
+  /* Форма и Размер */
+  width: 280px;
+  /* Фиксированная ширина для аккуратности */
+  border-radius: 20px;
+  /* Сильное скругление делает ноду "мягкой" */
+  padding: 0;
+  overflow: hidden;
+  /* Чтобы контент не вылезал за скругления */
+
+  /* Эффект Стекла (Самое важное) */
+  background: rgba(15, 15, 15, 0.65);
+  /* Темный полупрозрачный фон */
+  backdrop-filter: blur(16px);
+  /* Сильное размытие фона позади */
+  -webkit-backdrop-filter: blur(16px);
+
+  /* Тончайшая граница (Hairline) */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 4px 24px -1px rgba(0, 0, 0, 0.2),
+    /* Мягкая тень вниз */
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  /* Внутренний блик */
+
+  /* Плавность движений */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Node height variants */
-.node-small {
-  height: 50px;
+/* Эффект при наведении (Hover) */
+.node-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  /* Легкий подъем вверх */
+  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.4);
 }
 
-.node-medium {
-  height: 100px;
-}
-
-.node-large {
-  height: 250px;
-}
-
-.node-xlarge {
-  height: 300px;
-}
-
-/* Selection & Hover */
-.custom-node:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
-
-.react-flow__node.selected .custom-node,
-.react-flow__node.selected {
-  border-color: #00fff2 !important;
-  box-shadow: 0 0 0 2px rgba(0, 255, 242, 0.2) !important;
+/* Активное состояние (Selected) */
+.react-flow__node.selected .node-card,
+.node-card.selected {
+  border-color: rgba(120, 119, 198, 0.5) !important;
+  /* Цветной акцент (фиолетовый) */
+  box-shadow: 0 0 0 4px rgba(120, 119, 198, 0.15) !important;
+  /* Внешнее свечение (Glow) */
 }
 
 .react-flow__controls {

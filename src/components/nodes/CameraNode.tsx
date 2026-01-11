@@ -154,10 +154,8 @@ export const CameraNode = memo(({ id, data, selected }: NodeProps) => {
 
   return (
     <div className={`
-      custom-node
-      w-[380px]
-      overflow-hidden
-      ${selected ? 'border-accent-neon/50 ring-2 ring-accent-neon/20' : ''}
+      node-card
+      ${selected ? 'selected' : ''}
       ${isLoading ? 'opacity-80' : ''}
     `}>
       <Handle

@@ -86,15 +86,14 @@ export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
       <div
         data-state={(nodeData?.state as string) || 'idle'}
         className={`
-          custom-node
+          node-card
           relative
-          overflow-hidden
           ${nodeData?.state === 'loading' ? 'border-accent-neon/30' :
             nodeData?.state === 'success' ? 'border-green-500/30' :
               nodeData?.state === 'error' ? 'border-red-500/30' :
-                'border-white/10'
+                ''
           }
-          ${selected ? 'ring-2 ring-accent-neon/40 shadow-2xl shadow-accent-neon/10' : ''}
+          ${selected ? 'selected' : ''}
           ${isLoading ? 'opacity-90' : ''}
         `}
       >
