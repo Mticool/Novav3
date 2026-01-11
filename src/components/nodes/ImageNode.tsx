@@ -158,8 +158,8 @@ export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
                   )}
                 </>
               ) : (
-                <div className="flex flex-col items-start justify-center h-full w-full px-6 pointer-events-none node-detail">
-                  <div className="text-xs text-white/40 mb-3">Попробуйте:</div>
+                <div className="flex flex-col items-center justify-center h-full w-full px-6 pointer-events-none node-detail">
+                  <div className="text-xs text-white/40 mb-3 text-center">Попробуйте:</div>
                   <ul className="space-y-2">
                     <li className="flex items-center gap-2 text-xs text-white/30"><Upload size={10} /> Изображение в Изображение</li>
                     <li className="flex items-center gap-2 text-xs text-white/30"><span className="w-3 h-3 flex items-center justify-center">📹</span> Изображение в Видео</li>
@@ -278,7 +278,7 @@ export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedModel(model.id);
-                      updateNode(id, { settings: { ...settings, model: model.id } });
+                      updateSetting('model', model.id);
                       setShowModelPicker(false);
                     }}
                     className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-white/5 transition-colors ${selectedModel === model.id ? 'bg-blue-500/10' : ''}`}

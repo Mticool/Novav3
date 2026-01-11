@@ -84,7 +84,7 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
   const hasError = nodeData?.state === 'error';
 
   return (
-    <div className="w-[320px]">
+    <div className="w-[380px]">
       {/* Title (outside card) */}
       <div className="mb-2 flex items-center gap-2 text-xs text-white/60">
         <VideoIcon size={14} className="text-white/50" />
@@ -144,12 +144,15 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-start justify-center h-full w-full px-6 pointer-events-none node-detail">
-              <div className="text-xs text-white/40 mb-3">Попробуйте:</div>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2 text-xs text-white/30"><span className="w-3 h-3 flex items-center justify-center">✂️</span> Начало-Конец в Видео</li>
-                <li className="flex items-center gap-2 text-xs text-white/30"><span className="w-3 h-3 flex items-center justify-center">⏩</span> Первый кадр в Видео</li>
-              </ul>
+            <div className="relative h-[280px] bg-[#080808] flex flex-col items-center justify-center">
+              <div className="flex flex-col items-center justify-center h-full w-full px-6 pointer-events-none node-detail">
+                <VideoIcon size={32} className="text-white/10 mb-4" />
+                <div className="text-xs text-white/40 mb-3">Попробуйте:</div>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-xs text-white/30"><span className="w-3 h-3 flex items-center justify-center">✂️</span> Начало-Конец в Видео</li>
+                  <li className="flex items-center gap-2 text-xs text-white/30"><span className="w-3 h-3 flex items-center justify-center">⏩</span> Первый кадр в Видео</li>
+                </ul>
+              </div>
             </div>
           )}
         </div>
@@ -255,7 +258,7 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedModel(model.id);
-                      updateNode(id, { settings: { ...settings, model: model.id } });
+                      updateSetting('model', model.id);
                       setShowModelPicker(false);
                     }}
                     className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-white/5 transition-colors ${selectedModel === model.id ? 'bg-purple-500/10' : ''}`}
