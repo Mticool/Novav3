@@ -156,6 +156,10 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
           }}
           nodeTypes={nodeTypes}
           connectionLineType={ConnectionLineType.Bezier}
+          connectionLineStyle={{
+            strokeWidth: 2,
+            transition: 'all 0.2s ease'
+          }}
           defaultEdgeOptions={{
             animated: false,
             style: {
@@ -187,6 +191,12 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
               sourceHandleId: connectStart.handleId,
             });
           }}
+          defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+          minZoom={0.2}
+          maxZoom={2}
+          zoomOnScroll={true}
+          zoomOnPinch={true}
+          panOnScroll={false}
           fitView
           className="bg-canvas-bg"
           deleteKeyCode="Delete"
