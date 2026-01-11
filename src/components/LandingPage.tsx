@@ -1,79 +1,12 @@
-import { Github, Zap, Cpu, Sparkles, Layout, Play, Image as ImageIcon, Video, Wand2, ArrowRight } from 'lucide-react';
+import { Github, Zap, Cpu, Sparkles, Layout, Play, ArrowRight } from 'lucide-react';
 import { useStore } from '../store/useStore';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
-
-// --- Components for the Animation ---
-
-const AnimatedNode = ({ type, x, y, delay, label }: { type: string, x: number, y: number, delay: number, label: string }) => {
-    const iconMap: Record<string, any> = {
-        text: Wand2,
-        image: ImageIcon,
-        video: Video,
-        play: Play
-    };
-    const Icon = iconMap[type] || Sparkles;
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, scale: 0.8, x, y }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay, duration: 0.5, type: 'spring' }}
-            className="absolute p-4 bg-[#121212]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex items-center gap-3 z-10"
-            style={{ width: 180 }}
-        >
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${type === 'video' ? 'bg-purple-500/20 text-purple-400' : type === 'image' ? 'bg-blue-500/20 text-blue-400' : 'bg-[#EFFE17]/20 text-[#EFFE17]'}`}>
-                <Icon size={20} />
-            </div>
-            <div className="flex flex-col">
-                <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">{type}</span>
-                <span className="text-xs font-semibold text-white/90 truncate">{label}</span>
-            </div>
-            {/* Connection partials */}
-            <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-[#1a1a1a] border-2 border-white/20 rounded-full" />
-            <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-[#1a1a1a] border-2 border-white/20 rounded-full" />
-        </motion.div>
-    );
-};
-
-const AnimatedConnection = ({ from, to, delay }: { from: { x: number, y: number }, to: { x: number, y: number }, delay: number }) => {
-    // Path calculation
-    const dx = to.x - from.x;
-    const path = `M ${from.x + 180} ${from.y + 40} C ${from.x + 180 + dx / 2} ${from.y + 40}, ${from.x + 180 + dx / 2} ${to.y + 40}, ${to.x} ${to.y + 40}`;
-
-    return (
-        <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
-            <motion.path
-                d={path}
-                stroke="url(#grad)"
-                strokeWidth="2"
-                fill="none"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 1 }}
-                transition={{ delay, duration: 1.5, ease: "easeInOut" }}
-            />
-            <defs>
-                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#white" stopOpacity="0.1" />
-                    <stop offset="50%" stopColor="#EFFE17" stopOpacity="0.5" />
-                    <stop offset="100%" stopColor="#EFFE17" stopOpacity="0.2" />
-                </linearGradient>
-            </defs>
-        </svg>
-    );
-};
+import { motion } from 'framer-motion';
+import { ReactFlowProvider } from '@xyflow/react';
+import { HeroCanvas } from './HeroCanvas';
 
 export function LandingPage() {
     const setView = useStore((state) => state.setView);
     const clearWorkflow = useStore((state) => state.clearWorkflow);
-    const [step, setStep] = useState(0);
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setStep(s => (s + 1) % 5);
-        }, 3000);
-        return () => clearInterval(timer);
-    }, []);
 
     const handleCreate = () => {
         clearWorkflow();
@@ -203,38 +136,23 @@ export function LandingPage() {
                         </motion.div>
                     </div>
 
-                    {/* Right: Animation */}
-                    <div className="relative h-[500px] w-full hidden lg:block">
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-[40px] border border-white/5 backdrop-blur-[2px] overflow-hidden">
-                            {/* Animated Fake Canvas */}
-                            <AnimatePresence>
-                                <AnimatedNode type="text" x={50} y={100} delay={0.5} label="Cinematic Prompt" />
-                                {step >= 1 && <AnimatedConnection from={{ x: 50, y: 100 }} to={{ x: 280, y: 50 }} delay={0} />}
-                                {step >= 1 && <AnimatedNode type="image" x={280} y={50} delay={0.1} label="Character Design" />}
+                    {/* Right: Real React Flow Animation */}
+                    <div className="relative h-[550px] w-full hidden lg:block rounded-[40px] border border-white/5 bg-[#080808] overflow-hidden shadow-2xl">
+                        <ReactFlowProvider>
+                            <HeroCanvas />
+                        </ReactFlowProvider>
 
-                                {step >= 2 && <AnimatedConnection from={{ x: 280, y: 50 }} to={{ x: 50, y: 250 }} delay={0} />}
-                                {step >= 2 && <AnimatedNode type="image" x={50} y={250} delay={0.1} label="Environment" />}
-
-                                {step >= 3 && <AnimatedConnection from={{ x: 50, y: 250 }} to={{ x: 280, y: 300 }} delay={0} />}
-                                {step >= 3 && <AnimatedNode type="video" x={280} y={300} delay={0.1} label="Sora 2 Production" />}
-
-                                {step >= 4 && (
-                                    <motion.div
-                                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                                        className="absolute right-10 bottom-10 w-[200px] aspect-video bg-[#EFFE17]/10 rounded-2xl border-2 border-[#EFFE17]/40 overflow-hidden shadow-[0_0_50px_rgba(239,254,23,0.2)] z-20 flex items-center justify-center group"
-                                    >
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-3">
-                                            <span className="text-[10px] font-black text-white/90">Final Render.mp4</span>
-                                        </div>
-                                        <Play size={32} className="text-[#EFFE17] animate-pulse" />
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
+                        {/* Interactive overlay info */}
+                        <div className="absolute top-6 left-6 px-4 py-2 bg-black/50 backdrop-blur-md border border-white/10 rounded-full z-50 flex items-center gap-3 pointer-events-none">
+                            <div className="flex -space-x-2">
+                                {[1, 2, 3].map(i => <div key={i} className="w-5 h-5 rounded-full bg-white/10 border border-black" />)}
+                            </div>
+                            <span className="text-[10px] font-bold text-white/50 uppercase tracking-tighter">Live Preview Engine 2.0</span>
                         </div>
-                        {/* Decorative elements */}
-                        <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-500/20 blur-[80px] rounded-full animate-pulse" />
-                        <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-500/10 blur-[100px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
+
+                        {/* Decorative gradients */}
+                        <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-500/10 blur-[80px] rounded-full pointer-events-none" />
+                        <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-500/5 blur-[100px] rounded-full pointer-events-none" />
                     </div>
                 </div>
 
