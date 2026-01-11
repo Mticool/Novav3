@@ -17,7 +17,6 @@ import { CommentNode } from './components/nodes/CommentNode';
 import { ConnectSuggestMenu } from './components/ConnectSuggestMenu';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
-import { ApiKeyPrompt } from './components/ApiKeyPrompt';
 import { BottomControls } from './components/BottomControls';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ToastContainer } from './components/Toast';
@@ -27,7 +26,6 @@ import { OnboardingTour } from './components/OnboardingTour';
 import { useStore } from './store/useStore';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useAutoSave } from './hooks/useAutoSave';
-import { hasApiKeys, updateApiKeys } from './lib/api';
 
 
 const nodeTypes = {
@@ -97,15 +95,6 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
   const [showLibrary, setShowLibrary] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
 
-  // Check for API keys
-  const [showApiPrompt, setShowApiPrompt] = useState(false);
-
-  useEffect(() => {
-    const keys = hasApiKeys();
-    if (!keys.hasKie) {
-      setShowApiPrompt(true);
-    }
-  }, []);
 
   const handlePaneClick = (e: React.MouseEvent) => {
     if (e.detail === 2) {
@@ -113,10 +102,6 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
     }
   };
 
-  const handleSaveKeys = (openaiKey: string, kieKey: string) => {
-    updateApiKeys(openaiKey, kieKey);
-    setShowApiPrompt(false);
-  };
 
   useKeyboardShortcuts();
   useAutoSave(true);
@@ -133,8 +118,6 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
       {showLibrary && <LibraryPanel onClose={() => setShowLibrary(false)} />}
       {showHistory && <HistoryPanel onClose={() => setShowHistory(true)} />}
 
-      {/* API Key Prompt */}
-      {showApiPrompt && <ApiKeyPrompt onSave={handleSaveKeys} />}
 
       {/* Sidebar */}
       <Sidebar
