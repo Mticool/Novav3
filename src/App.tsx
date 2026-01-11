@@ -1,4 +1,4 @@
-import { ReactFlow, Background, MiniMap, ReactFlowProvider, ConnectionLineType, Connection, ReactFlowInstance, OnConnectStartParams } from '@xyflow/react';
+import { ReactFlow, Background, MiniMap, ReactFlowProvider, ConnectionLineType, Connection, ReactFlowInstance, OnConnectStartParams, useViewport } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useState, useEffect } from 'react';
 import { CanvasEmptyState } from './components/CanvasEmptyState';
@@ -29,7 +29,6 @@ import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useAutoSave } from './hooks/useAutoSave';
 import { hasApiKeys, updateApiKeys } from './lib/api';
 
-type NodeType = 'text' | 'image' | 'video' | 'masterPrompt' | 'modifier' | 'generator' | 'camera' | 'imageUpload' | 'arraySplitter' | 'comment';
 
 const nodeTypes = {
   image: ImageNode,
@@ -53,6 +52,25 @@ function App() {
   const addNodeAt = useStore((state) => state.addNodeAt);
   const view = useStore((state) => state.view);
 
+  if (view === 'landing') {
+    return <LandingPage />;
+  }
+
+  return (
+    <ReactFlowProvider>
+      <FlowEditor
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        addNodeAt={addNodeAt}
+      />
+    </ReactFlowProvider>
+  );
+}
+
+function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, addNodeAt }: any) {
   const [rf, setRf] = useState<ReactFlowInstance | null>(null);
   const [connectStart, setConnectStart] = useState<{
     nodeId: string;
@@ -65,6 +83,9 @@ function App() {
     sourceNodeId: string;
     sourceHandleId?: string | null;
   } | null>(null);
+
+  const { zoom } = useViewport();
+  const zoomClass = zoom < 0.5 ? 'zoom-far' : zoom < 0.8 ? 'zoom-mid' : 'zoom-near';
 
   // Panels state
   const [showLibrary, setShowLibrary] = useState(false);
@@ -82,7 +103,6 @@ function App() {
 
   const handlePaneClick = (e: React.MouseEvent) => {
     if (e.detail === 2) {
-      // Double click to open library
       setShowLibrary(true);
     }
   };
@@ -92,18 +112,11 @@ function App() {
     setShowApiPrompt(false);
   };
 
-  // Keyboard shortcuts
   useKeyboardShortcuts();
-
-  // Auto-save
   useAutoSave(true);
 
-  if (view === 'landing') {
-    return <LandingPage />;
-  }
-
   return (
-    <div className="h-screen w-screen bg-canvas-bg flex">
+    <div className={`h-screen w-screen bg-canvas-bg flex ${zoomClass}`}>
       {/* Onboarding */}
       <OnboardingTour />
 
@@ -112,7 +125,7 @@ function App() {
 
       {/* Panels */}
       {showLibrary && <LibraryPanel onClose={() => setShowLibrary(false)} />}
-      {showHistory && <HistoryPanel onClose={() => setShowHistory(false)} />}
+      {showHistory && <HistoryPanel onClose={() => setShowHistory(true)} />}
 
       {/* API Key Prompt */}
       {showApiPrompt && <ApiKeyPrompt onSave={handleSaveKeys} />}
@@ -131,107 +144,101 @@ function App() {
         <TopBar />
 
         {/* Canvas */}
-        <ReactFlowProvider>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={(c: Connection) => {
-              setSuggestMenu(null);
-              setConnectStart(null);
-              onConnect(c);
-            }}
-            nodeTypes={nodeTypes}
-            connectionLineType={ConnectionLineType.Bezier}
-            defaultEdgeOptions={{
-              // default edge type (bezier). Intentionally omit `type`.
-              animated: false,
-              style: {
-                strokeWidth: 2,
-                stroke: '#64748b',
-              },
-              interactionWidth: 20,
-              className: 'edge-hoverable',
-            }}
-            onInit={(instance) => setRf(instance)}
-            onConnectStart={(_, params: OnConnectStartParams) => {
-              // params: { nodeId, handleId, handleType }
-              if (params.nodeId) {
-                setConnectStart({
-                  nodeId: params.nodeId,
-                  handleId: params.handleId,
-                  handleType: params.handleType,
-                });
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={(c: Connection) => {
+            setSuggestMenu(null);
+            setConnectStart(null);
+            onConnect(c);
+          }}
+          nodeTypes={nodeTypes}
+          connectionLineType={ConnectionLineType.Bezier}
+          defaultEdgeOptions={{
+            animated: false,
+            style: {
+              strokeWidth: 2,
+              stroke: '#64748b',
+            },
+            interactionWidth: 20,
+            className: 'edge-hoverable',
+          }}
+          onInit={(instance) => setRf(instance)}
+          onConnectStart={(_, params: OnConnectStartParams) => {
+            if (params.nodeId) {
+              setConnectStart({
+                nodeId: params.nodeId,
+                handleId: params.handleId,
+                handleType: params.handleType,
+              });
+            }
+          }}
+          onConnectEnd={(event) => {
+            const target = event.target as HTMLElement | null;
+            const droppedOnPane = !!target?.classList?.contains('react-flow__pane');
+            if (!droppedOnPane) return;
+            if (!connectStart?.nodeId) return;
+            setSuggestMenu({
+              x: (event as MouseEvent).clientX,
+              y: (event as MouseEvent).clientY,
+              sourceNodeId: connectStart.nodeId,
+              sourceHandleId: connectStart.handleId,
+            });
+          }}
+          fitView
+          className="bg-canvas-bg"
+          deleteKeyCode="Delete"
+          multiSelectionKeyCode="Shift"
+          snapToGrid={true}
+          snapGrid={[20, 20]}
+          nodesDraggable={true}
+          nodeDragThreshold={2}
+          onPaneClick={handlePaneClick}
+        >
+          <Background
+            gap={24}
+            size={1.5}
+            color="rgba(255, 255, 255, 0.05)"
+          />
+          <BottomControls />
+          <MiniMap
+            nodeColor={(node) => {
+              switch (node.type) {
+                case 'image': return '#3b82f6';
+                case 'video': return '#a855f7';
+                case 'text': return '#10b981';
+                case 'camera': return '#8b5cf6';
+                case 'masterPrompt': return '#a855f7';
+                case 'modifier': return '#f59e0b';
+                case 'generator': return '#06b6d4';
+                default: return '#64748b';
               }
             }}
-            onConnectEnd={(event) => {
-              // if dropped on pane -> open suggest menu at cursor
-              const target = event.target as HTMLElement | null;
-              const droppedOnPane = !!target?.classList?.contains('react-flow__pane');
-              if (!droppedOnPane) return;
-              if (!connectStart?.nodeId) return;
-              setSuggestMenu({
-                x: (event as MouseEvent).clientX,
-                y: (event as MouseEvent).clientY,
-                sourceNodeId: connectStart.nodeId,
-                sourceHandleId: connectStart.handleId,
-              });
+            maskColor="rgba(0, 0, 0, 0.6)"
+            style={{
+              background: 'rgba(26, 26, 26, 0.95)',
+              border: '1px solid rgba(255, 255, 255, 0.05)',
+              borderRadius: '12px',
+              overflow: 'hidden',
             }}
-            fitView
-            className="bg-canvas-bg"
-            deleteKeyCode="Delete"
-            multiSelectionKeyCode="Shift"
-            snapToGrid={true}
-            snapGrid={[20, 20]}
-            nodesDraggable={true}
-            nodeDragThreshold={2}
-            onPaneClick={handlePaneClick}
-          >
-            <Background
-              gap={24}
-              size={1.5}
-              color="rgba(255, 255, 255, 0.05)"
-            />
-            <BottomControls />
-            <MiniMap
-              nodeColor={(node) => {
-                switch (node.type) {
-                  case 'image': return '#3b82f6';
-                  case 'video': return '#a855f7';
-                  case 'text': return '#10b981';
-                  case 'camera': return '#8b5cf6';
-                  case 'masterPrompt': return '#a855f7';
-                  case 'modifier': return '#f59e0b';
-                  case 'generator': return '#06b6d4';
-                  default: return '#64748b';
-                }
-              }}
-              maskColor="rgba(0, 0, 0, 0.6)"
-              style={{
-                background: 'rgba(26, 26, 26, 0.95)',
-                border: '1px solid rgba(255, 255, 255, 0.05)',
-                borderRadius: '12px',
-                overflow: 'hidden',
-              }}
-            />
+          />
 
-            {/* Empty state */}
-            {nodes.length === 0 && <CanvasEmptyState />}
+          {/* Empty state */}
+          {nodes.length === 0 && <CanvasEmptyState />}
 
-          </ReactFlow>
-        </ReactFlowProvider>
+        </ReactFlow>
 
         {suggestMenu && (
           <ConnectSuggestMenu
             x={suggestMenu.x}
             y={suggestMenu.y}
             onClose={() => setSuggestMenu(null)}
-            onPick={(type) => {
+            onPick={(type: any) => {
               if (!rf) return;
-              // Convert screen coords to flow coords and place node slightly to the right
               const pos = rf.screenToFlowPosition({ x: suggestMenu.x, y: suggestMenu.y });
-              const newId = addNodeAt(type as NodeType, { x: pos.x + 140, y: pos.y - 80 });
+              const newId = addNodeAt(type, { x: pos.x + 140, y: pos.y - 80 });
               onConnect({ source: suggestMenu.sourceNodeId, target: newId, sourceHandle: null, targetHandle: null });
               setSuggestMenu(null);
               setConnectStart(null);

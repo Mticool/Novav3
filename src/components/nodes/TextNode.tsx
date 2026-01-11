@@ -46,8 +46,8 @@ export const TextNode = memo(({ id, data, selected }: NodeProps) => {
           <Type size={16} className="text-green-300/90" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-sm font-semibold text-white truncate">{(nodeData?.title as string) || 'Текст'}</div>
-          <div className="text-xs text-white/40">Промпт</div>
+          <div className="text-sm font-semibold text-white truncate node-text">{(nodeData?.title as string) || 'Текст'}</div>
+          <div className="text-xs text-white/40 node-detail">Промпт</div>
         </div>
       </div>
 
@@ -106,7 +106,7 @@ export const TextNode = memo(({ id, data, selected }: NodeProps) => {
       )}
 
       {!isEditing && (
-        <div className="px-4 py-3 bg-[#0a0a0a] flex items-center justify-between border-t border-white/5">
+        <div className="px-4 py-3 bg-[#0a0a0a] flex items-center justify-between border-t border-white/5 node-detail">
           <div className="text-xs text-white/30">
             {content.length} симв.
           </div>

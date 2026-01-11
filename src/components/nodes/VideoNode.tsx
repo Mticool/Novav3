@@ -88,7 +88,7 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
       {/* Title (outside card) */}
       <div className="mb-2 flex items-center gap-2 text-xs text-white/60">
         <VideoIcon size={14} className="text-white/50" />
-        <span className="text-white/80 font-medium truncate">{(nodeData?.title as string) || 'Генератор видео'}</span>
+        <span className="text-white/80 font-medium truncate node-text">{(nodeData?.title as string) || 'Генератор видео'}</span>
       </div>
 
       <div
@@ -144,7 +144,7 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-start justify-center h-full w-full px-6 pointer-events-none">
+            <div className="flex flex-col items-start justify-center h-full w-full px-6 pointer-events-none node-detail">
               <div className="text-xs text-white/40 mb-3">Попробуйте:</div>
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 text-xs text-white/30"><span className="w-3 h-3 flex items-center justify-center">✂️</span> Начало-Конец в Видео</li>
@@ -155,7 +155,7 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
         </div>
 
         {/* Bottom control strip */}
-        <div className="px-3 py-3 bg-[#0a0a0a] border-t border-white/5">
+        <div className="px-3 py-3 bg-[#0a0a0a] border-t border-white/5 node-detail">
           <div className="flex items-center gap-2">
             {/* Model */}
             <button

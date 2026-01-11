@@ -369,4 +369,47 @@ body {
   opacity: 0.8;
 }
 
-/* Clean: Removed broken border-image classes */
+/* ===========================================
+   ADAPTIVE LEVEL OF DETAIL (LOD)
+   =========================================== */
+
+/* Transition for detail elements */
+.node-detail {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Transitions for text elements */
+.node-text {
+  transition: font-size 0.2s ease, opacity 0.2s ease;
+}
+
+/* Zoom Far (< 0.5) */
+.zoom-far .node-detail {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.zoom-far .node-text {
+  font-size: 0px !important;
+  opacity: 0;
+}
+
+/* Zoom Mid (< 0.8) */
+.zoom-mid .node-detail {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.zoom-mid .node-text {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* Initial state for Detail/Text */
+.node-detail {
+  display: block;
+}
+
+.node-text {
+  display: block;
+}
