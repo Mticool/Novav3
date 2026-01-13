@@ -7,20 +7,27 @@
    =========================================== */
 
 :root {
-  /* ЦВЕТОВАЯ СХЕМА */
-  --canvas-bg: #1a1a1a;
-  --node-bg: #2a2a2a;
-  --node-border: #444;
-  --text-primary: #ddd;
-  --text-secondary: #999;
-  --text-tertiary: #666;
+  /* ЦВЕТОВАЯ СХЕМА (PIKASO) */
+  --canvas-bg: #141414;
+  --node-bg: #1f1f1f;
+  --node-border: rgba(255, 255, 255, 0.1);
+  --node-border-hover: rgba(255, 255, 255, 0.15);
+  --node-border-selected: #0099ff;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --text-tertiary: #888888;
   --handle-blue: #0088ff;
   --handle-green: #22dd88;
-  --input-bg: #1a1a1a;
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --input-border: rgba(255, 255, 255, 0.1);
   
-  /* РАЗМЕРЫ */
+  /* РАЗМЕРЫ (PIKASO) */
   --handle-size: 8px;
-  --node-radius: 8px;
+  --node-radius: 18px;
+  --node-padding: 20px;
+  --node-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --node-shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --node-shadow-selected: 0 0 0 3px rgba(0, 153, 255, 0.2), 0 8px 32px rgba(0, 153, 255, 0.3);
 }
 
 /* ОСНОВНОЙ ШРИФТ */
@@ -31,40 +38,139 @@
 }
 
 /* ===========================================
-   CANVAS
+   CANVAS (PIKASO STYLE)
    =========================================== */
 
 .react-flow__pane {
-  background: var(--canvas-bg) !important;
+  background: #141414 !important;
 }
 
 .react-flow__background {
-  background: var(--canvas-bg) !important;
+  background-color: #141414 !important;
+}
+
+/* Едва заметная сетка */
+.react-flow__background pattern {
+  stroke: rgba(255, 255, 255, 0.03) !important;
+}
+
+.react-flow__background line {
+  stroke: rgba(255, 255, 255, 0.03) !important;
+}
+
+.react-flow__background circle {
+  fill: rgba(255, 255, 255, 0.03) !important;
 }
 
 /* ===========================================
-   NODE CARD
+   NODE CARD (PIKASO STYLE)
    =========================================== */
 
 .react-flow__node,
 .node-card {
-  background: var(--node-bg) !important;
-  border: 1px solid var(--node-border) !important;
-  border-radius: var(--node-radius) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  background: #1f1f1f !important;
+  border: 2px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
   padding: 0;
   overflow: hidden;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .react-flow__node:hover {
-  border-color: #666 !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5) !important;
 }
 
-.react-flow__node.selected {
-  border-color: var(--handle-blue) !important;
-  box-shadow: 0 0 16px rgba(0, 136, 255, 0.2) !important;
+.react-flow__node.selected,
+.node-card.selected {
+  border-color: #0099ff !important;
+  box-shadow: 
+    0 0 0 3px rgba(0, 153, 255, 0.2),
+    0 8px 32px rgba(0, 153, 255, 0.3) !important;
+}
+
+/* Состояния нод */
+.node-card[data-state="loading"] {
+  border-color: rgba(100, 200, 255, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(100, 200, 255, 0.2) !important;
+}
+
+.node-card[data-state="success"] {
+  border-color: rgba(34, 221, 136, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(34, 221, 136, 0.2) !important;
+}
+
+.node-card[data-state="error"] {
+  border-color: rgba(255, 100, 100, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(255, 100, 100, 0.2) !important;
+}
+
+/* Заголовок ноды */
+.node-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  padding: 16px;
+}
+
+.node-header-icon {
+  width: 20px;
+  height: 20px;
+  opacity: 0.8;
+}
+
+/* Текстовое поле внутри ноды */
+.node-textarea {
+  width: 100%;
+  min-height: 80px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  color: #ffffff;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.node-textarea:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #0099ff;
+}
+
+/* Панель действий над нодой */
+.node-actions-bar {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 8px 16px;
+  display: flex;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.node-action-button {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.node-action-button:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* ===========================================

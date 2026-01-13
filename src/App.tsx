@@ -126,7 +126,7 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
   useAutoSave(true);
 
   return (
-    <div className={`h-screen w-screen bg-[#0a0a0a] flex overflow-hidden ${zoomClass}`}>
+    <div className={`h-screen w-screen bg-[#141414] flex overflow-hidden ${zoomClass}`}>
       {/* Onboarding */}
       <OnboardingTour />
 
@@ -241,11 +241,12 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
           onPaneClick={handlePaneClick}
           preventScrolling={true}
         >
-          <Background
-            gap={20}
-            size={1}
-            color="rgba(255, 255, 255, 0.03)"
-          />
+        <Background
+          gap={20}
+          size={1}
+          color="rgba(255, 255, 255, 0.03)"
+          style={{ backgroundColor: '#141414' }}
+        />
           <BottomControls />
           <MiniMap
             nodeColor={(node) => {

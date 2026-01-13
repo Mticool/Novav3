@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
-import { Play, Loader2, Video as VideoIcon } from 'lucide-react';
+import { Play, Loader2, Video as VideoIcon, Trash2, Link } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { VIDEO_MODELS_EXTENDED } from '../../lib/api';
 import { ModelSelector } from '../NodeParams/ModelSelector';
@@ -13,6 +13,7 @@ import { ProgressBar } from '../NodeParams/ProgressBar';
 export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
   const generateFromText = useStore(s => s.generateFromText);
   const updateNode = useStore(s => s.updateNode);
+  const deleteNode = useStore(s => s.deleteNode);
   const nodes = useStore(s => s.nodes);
   const edges = useStore(s => s.edges);
 
@@ -40,20 +41,52 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
     await generateFromText(sourceNode.id, id);
   };
 
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (confirm('Удалить эту ноду?')) {
+      deleteNode(id);
+    }
+  };
+
   const isLoading = nodeData?.state === 'loading';
   const progress = (nodeData?.progress as number) || 0;
   const currentStep = nodeData?.currentStep as string | undefined;
 
   return (
     <div className="w-[330px] relative">
+      {/* Панель действий (показывается при выделении) */}
+      {selected && (
+        <div className="node-actions-bar">
+          <button className="node-action-button" title="Подключиться к">
+            <Link size={14} />
+            <span className="ml-1.5">Подключиться к</span>
+          </button>
+          <button 
+            className="node-action-button"
+            onClick={(e) => { e.stopPropagation(); void handleGenerate(); }}
+            disabled={isLoading}
+            title="Генерировать"
+          >
+            {isLoading ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} />}
+          </button>
+          <button 
+            className="node-action-button"
+            onClick={handleDelete}
+            title="Удалить"
+          >
+            <Trash2 size={14} />
+          </button>
+        </div>
+      )}
+
       <div
         data-state={(nodeData?.state as string) || 'idle'}
         className={`node-card ${selected ? 'selected' : ''}`}
       >
         {/* Header */}
-        <div className="flex items-center gap-2 px-3 py-2 border-b border-white/[0.04]">
-          <VideoIcon size={12} className="opacity-50" />
-          <span className="text-[11px] font-medium text-white/65 flex-1">
+        <div className="node-header">
+          <VideoIcon size={20} className="node-header-icon" />
+          <span className="flex-1">
             {(nodeData?.title as string) || 'Генератор видео #1'}
           </span>
           <button
@@ -67,13 +100,7 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
 
         {/* Params panel - показывается только когда нода selected */}
         {selected && (
-          <div className="px-3 py-2 border-b border-white/[0.04] space-y-2">
-            <ModelSelector 
-              value={params.model}
-              options={VIDEO_MODELS_EXTENDED}
-              onChange={(v) => setParams({...params, model: v})}
-              category="video"
-            />
+          <div className="px-3 py-2 border-b border-white/[0.04]">
             <div className="flex gap-2 flex-wrap items-center">
               <AspectRatioSelector 
                 value={params.aspectRatio} 
@@ -108,13 +135,13 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
             <span className="text-[10px] text-white/40">Текст</span>
           </div>
 
-          <input
-            type="text"
+          <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Опишите видео..."
-            className="w-full bg-black/30 border border-white/[0.03] rounded-lg px-3 py-2 text-[12px] text-white/80 placeholder:text-white/20 outline-none focus:border-blue-500/30"
+            className="node-textarea"
             onClick={(e) => e.stopPropagation()}
+            rows={3}
           />
         </div>
 
@@ -150,7 +177,7 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
         <Handle type="source" position={Position.Right} id="video-output" />
 
         {/* Выходы */}
-        <div className="px-3 pb-3 space-y-2">
+        <div className="px-3 pb-2 space-y-2">
           <div className="flex items-center justify-end gap-2">
             <span className="text-[10px] text-white/40">Начальное изображение</span>
           </div>
@@ -160,6 +187,16 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
           <div className="flex items-center justify-end gap-2">
             <span className="text-[10px] text-white/40">Сгенерированное видео</span>
           </div>
+        </div>
+
+        {/* Model Selector внизу */}
+        <div className="px-3 pb-3 border-t border-white/[0.04] pt-2">
+          <ModelSelector 
+            value={params.model}
+            options={VIDEO_MODELS_EXTENDED}
+            onChange={(v) => setParams({...params, model: v})}
+            category="video"
+          />
         </div>
       </div>
     </div>

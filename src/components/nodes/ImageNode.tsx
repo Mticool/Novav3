@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
-import { Loader2, Play } from 'lucide-react';
+import { Loader2, Play, Trash2, Link } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { IMAGE_MODELS_EXTENDED } from '../../lib/api';
 import { ModelSelector } from '../NodeParams/ModelSelector';
@@ -13,6 +13,7 @@ import { ProgressBar } from '../NodeParams/ProgressBar';
 export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
   const generateFromText = useStore(s => s.generateFromText);
   const updateNode = useStore(s => s.updateNode);
+  const deleteNode = useStore(s => s.deleteNode);
   const nodes = useStore(s => s.nodes);
   const edges = useStore(s => s.edges);
 
@@ -40,24 +41,56 @@ export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
     await generateFromText(sourceNode.id, id);
   };
 
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (confirm('Удалить эту ноду?')) {
+      deleteNode(id);
+    }
+  };
+
   const isLoading = nodeData?.state === 'loading';
   const progress = (nodeData?.progress as number) || 0;
   const currentStep = nodeData?.currentStep as string | undefined;
 
   return (
     <div className="w-[280px] relative">
+      {/* Панель действий (показывается при выделении) */}
+      {selected && (
+        <div className="node-actions-bar">
+          <button className="node-action-button" title="Подключиться к">
+            <Link size={14} />
+            <span className="ml-1.5">Подключиться к</span>
+          </button>
+          <button 
+            className="node-action-button"
+            onClick={(e) => { e.stopPropagation(); void handleGenerate(); }}
+            disabled={isLoading}
+            title="Генерировать"
+          >
+            {isLoading ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} />}
+          </button>
+          <button 
+            className="node-action-button"
+            onClick={handleDelete}
+            title="Удалить"
+          >
+            <Trash2 size={14} />
+          </button>
+        </div>
+      )}
+
       <div
         data-state={(nodeData?.state as string) || 'idle'}
         className={`node-card ${selected ? 'selected' : ''}`}
       >
         {/* Header */}
-        <div className="flex items-center gap-2 px-3 py-2 border-b border-white/[0.04]">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-50">
+        <div className="node-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="node-header-icon">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
             <circle cx="8.5" cy="8.5" r="1.5"/>
             <polyline points="21 15 16 10 5 21"/>
           </svg>
-          <span className="text-[11px] font-medium text-white/65 flex-1">
+          <span className="flex-1">
             {(nodeData?.title as string) || 'Генератор изображений #1'}
           </span>
           <button
@@ -71,13 +104,7 @@ export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
 
         {/* Params panel - показывается только когда нода selected */}
         {selected && (
-          <div className="px-3 py-2 border-b border-white/[0.04] space-y-2">
-            <ModelSelector 
-              value={params.model}
-              options={IMAGE_MODELS_EXTENDED}
-              onChange={(v) => setParams({...params, model: v})}
-              category="image"
-            />
+          <div className="px-3 py-2 border-b border-white/[0.04]">
             <div className="flex gap-2 items-center">
               <AspectRatioSelector 
                 value={params.aspectRatio} 
@@ -122,13 +149,13 @@ export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
           </div>
 
           {/* Редактируемое поле */}
-          <input
-            type="text"
+          <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Запрос (связанный)"
-            className="w-full bg-black/30 border border-white/[0.03] rounded-lg px-3 py-2 text-[12px] text-white/80 placeholder:text-white/20 outline-none focus:border-blue-500/30"
+            className="node-textarea"
             onClick={(e) => e.stopPropagation()}
+            rows={3}
           />
         </div>
 
@@ -166,8 +193,18 @@ export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
         />
 
         {/* Выход с меткой */}
-        <div className="px-3 pb-3 flex items-center justify-end gap-2">
+        <div className="px-3 pb-2 flex items-center justify-end gap-2">
           <span className="text-[10px] text-white/40">Сгенерированное изображение</span>
+        </div>
+
+        {/* Model Selector внизу */}
+        <div className="px-3 pb-3 border-t border-white/[0.04] pt-2">
+          <ModelSelector 
+            value={params.model}
+            options={IMAGE_MODELS_EXTENDED}
+            onChange={(v) => setParams({...params, model: v})}
+            category="image"
+          />
         </div>
       </div>
     </div>

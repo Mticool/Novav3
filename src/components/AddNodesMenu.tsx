@@ -12,54 +12,58 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
 
   const categories = [
     {
-      title: 'МЕДИА',
-      items: [
-        {
-          icon: Upload,
-          label: 'Загрузить',
-          subtitle: 'Изображение или видео',
-          type: 'imageUpload' as const,
-          badge: undefined as string | undefined,
-          badgeColor: undefined as string | undefined,
-        },
-      ]
-    },
-    {
       title: 'УЗЛЫ',
       items: [
         {
           icon: Type,
+          emoji: '📝',
           label: 'Текст',
-          subtitle: 'Текстовый промпт',
+          subtitle: 'Добавить текстовый узел',
           type: 'text' as const
         },
         {
           icon: Image,
+          emoji: '🎨',
           label: 'Генератор изображений',
-          subtitle: 'AI генерация картинок',
+          subtitle: 'AI генерация изображений',
           type: 'image' as const
         },
         {
           icon: Video,
+          emoji: '🎬',
           label: 'Генератор видео',
           subtitle: 'AI генерация видео',
           type: 'video' as const
         },
         {
+          icon: MessageSquare,
+          emoji: '🤖',
+          label: 'AI Ассистент',
+          subtitle: 'AI помощник для промптов',
+          badge: 'GPT-4o',
+          badgeColor: 'bg-green-500/20 text-green-400',
+          type: 'assistant' as const
+        },
+        {
           icon: Brain,
+          emoji: '🧠',
           label: 'Помощник',
           subtitle: 'Улучшение промпта',
           badge: 'AI',
           badgeColor: 'bg-purple-500/20 text-purple-400',
           type: 'masterPrompt' as const
         },
+      ]
+    },
+    {
+      title: 'МЕДИА',
+      items: [
         {
-          icon: MessageSquare,
-          label: 'AI Ассистент',
-          subtitle: 'Генерация идей и промптов',
-          badge: 'GPT-4o',
-          badgeColor: 'bg-green-500/20 text-green-400',
-          type: 'assistant' as const
+          icon: Upload,
+          emoji: '📤',
+          label: 'Загрузить',
+          subtitle: 'Изображение или видео',
+          type: 'imageUpload' as const,
         },
       ]
     },
@@ -68,14 +72,16 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
       items: [
         {
           icon: Wand2,
+          emoji: '⬆️',
           label: 'Улучшение качества',
-          subtitle: 'Upscale & enhance',
+          subtitle: 'Upscale изображений',
           badge: 'PRO',
           badgeColor: 'bg-orange-500/20 text-orange-400',
           type: 'generator' as const
         },
         {
           icon: Sparkles,
+          emoji: '✨',
           label: 'Улучшение изображения',
           subtitle: 'Резкость и контраст',
           badge: 'NEW',
@@ -84,6 +90,7 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
         },
         {
           icon: RotateCw,
+          emoji: '📷',
           label: 'Камера',
           subtitle: 'Изменение ракурса',
           badge: 'BETA',
@@ -92,6 +99,7 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
         },
         {
           icon: Move3d,
+          emoji: '🔄',
           label: 'Угол камеры',
           subtitle: 'Поворот, наклон, зум',
           badge: 'NEW',
@@ -100,12 +108,14 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
         },
         {
           icon: Palette,
+          emoji: '🎨',
           label: 'Модификатор',
           subtitle: 'Стиль, свет, угол',
           type: 'modifier' as const
         },
         {
           icon: SplitSquareHorizontal,
+          emoji: '✂️',
           label: 'Array Splitter',
           subtitle: 'Разделение на список',
           badge: 'NEW',
@@ -114,6 +124,7 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
         },
         {
           icon: Type,
+          emoji: '💬',
           label: 'Комментарий',
           subtitle: 'Заметки на холсте',
           type: 'comment' as const
@@ -195,12 +206,12 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
                         handleAddNode(item.type);
                       }
                     }}
-                    className="w-full flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group text-left"
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors group text-left"
                   >
-                    {/* Icon */}
-                    <div className="mt-0.5 w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
-                      <item.icon size={16} className="text-white/70 group-hover:text-white transition-colors" />
-                    </div>
+                    {/* Emoji Icon */}
+                    {'emoji' in item && item.emoji && (
+                      <span className="text-lg flex-shrink-0">{item.emoji}</span>
+                    )}
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
@@ -215,8 +226,8 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
                     </div>
 
                     {/* Badge */}
-                    {item.badge && (
-                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${item.badgeColor} mt-0.5`}>
+                    {'badge' in item && item.badge && (
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${item.badgeColor || ''} flex-shrink-0`}>
                         {item.badge}
                       </span>
                     )}
