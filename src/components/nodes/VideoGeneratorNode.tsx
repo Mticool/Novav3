@@ -154,26 +154,16 @@ export const VideoGeneratorNode = memo(({ id, data, selected }: NodeProps) => {
           </div>
         </div>
 
-        {/* Outputs (снизу) */}
-        <div className="mt-6 space-y-3 text-[13px] font-medium text-white/80 pr-4">
-          <div className="flex items-center justify-between">
-            <span className="node-label">Начальное изображение</span>
-            <span className="text-white/30"> </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="node-label">Конечное изображение</span>
-            <span className="text-white/30"> </span>
-          </div>
+        {/* Output (снизу) - ТОЛЬКО ОДИН выход! */}
+        <div className="mt-6 pr-4">
           <div className="flex items-center justify-between">
             <span className="node-label">Сгенерированное видео</span>
             <span className="text-white/30"> </span>
           </div>
         </div>
 
-        {/* Handles (Outputs снизу) — точки справа, как в Pikaso */}
-        <Handle type="source" position={Position.Right} id="start-out" style={{ bottom: 214 }} />
-        <Handle type="source" position={Position.Right} id="end-out" style={{ bottom: 186 }} />
-        <Handle type="source" position={Position.Right} id="video-output" style={{ bottom: 158 }} />
+        {/* Handle (Output снизу) — ТОЛЬКО ОДНА точка для видео */}
+        <Handle type="source" position={Position.Right} id="video-output" style={{ bottom: 188 }} />
 
         {/* Bottom models bar (СТРОГО ВНИЗУ) */}
         <div className="mt-6 border-t border-white/10 pt-5">
