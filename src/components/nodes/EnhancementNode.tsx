@@ -2,6 +2,7 @@ import { memo, useState } from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { Sparkles, Play, Loader2 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { DownloadButton } from '../NodeParams/DownloadButton';
 
 export const EnhancementNode = memo(({ id, data, selected }: NodeProps) => {
   const updateNode = useStore(s => s.updateNode);
@@ -92,12 +93,15 @@ export const EnhancementNode = memo(({ id, data, selected }: NodeProps) => {
         {/* Preview */}
         {nodeData?.outputImage && typeof nodeData.outputImage === 'string' ? (
           <div className="px-3 py-2">
-            <div className="w-full h-[100px] bg-black/30 border border-white/[0.03] rounded-lg overflow-hidden">
+            <div className="w-full h-[100px] bg-black/30 border border-white/[0.03] rounded-lg overflow-hidden relative">
               <img 
                 src={nodeData.outputImage} 
                 alt="Enhanced" 
                 className="w-full h-full object-cover"
               />
+              <div className="absolute top-2 right-2">
+                <DownloadButton url={nodeData.outputImage} filename="enhanced" type="image" />
+              </div>
             </div>
           </div>
         ) : null}

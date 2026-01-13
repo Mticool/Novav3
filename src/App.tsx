@@ -16,6 +16,7 @@ import { ArraySplitterNode } from './components/nodes/ArraySplitterNode';
 import { CommentNode } from './components/nodes/CommentNode';
 import { EnhancementNode } from './components/nodes/EnhancementNode';
 import { CameraAngleNode } from './components/nodes/CameraAngleNode';
+import { AssistantNode } from './components/nodes/AssistantNode';
 import { ConnectSuggestMenu } from './components/ConnectSuggestMenu';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
@@ -46,6 +47,7 @@ const nodeTypes = {
   comment: CommentNode,
   enhancement: EnhancementNode,
   cameraAngle: CameraAngleNode,
+  assistant: AssistantNode,
 };
 
 function App() {

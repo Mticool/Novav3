@@ -2,14 +2,28 @@ import { memo, useState } from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { Loader2, Play } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { IMAGE_MODELS_EXTENDED } from '../../lib/api';
+import { ModelSelector } from '../NodeParams/ModelSelector';
+import { AspectRatioSelector } from '../NodeParams/AspectRatioSelector';
+import { ResolutionSelector } from '../NodeParams/ResolutionSelector';
+import { CountSpinner } from '../NodeParams/CountSpinner';
+import { DownloadButton } from '../NodeParams/DownloadButton';
+import { ProgressBar } from '../NodeParams/ProgressBar';
 
 export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
   const generateFromText = useStore(s => s.generateFromText);
+  const updateNode = useStore(s => s.updateNode);
   const nodes = useStore(s => s.nodes);
   const edges = useStore(s => s.edges);
 
   const nodeData = data as Record<string, unknown>;
   const [prompt, setPrompt] = useState<string>('');
+  const [params, setParams] = useState({
+    model: 'nano-banana-pro',
+    aspectRatio: '1:1',
+    resolution: '2K',
+    count: 1
+  });
 
   const handleGenerate = async () => {
     const incomingEdge = edges.find(e => e.target === id);
@@ -21,10 +35,14 @@ export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
     const sourceNode = nodes.find(n => n.id === incomingEdge.source);
     if (!sourceNode) return;
 
+    // Save params to node data
+    updateNode(id, { params });
     await generateFromText(sourceNode.id, id);
   };
 
   const isLoading = nodeData?.state === 'loading';
+  const progress = (nodeData?.progress as number) || 0;
+  const currentStep = nodeData?.currentStep as string | undefined;
 
   return (
     <div className="w-[280px] relative">
@@ -50,6 +68,33 @@ export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
             {isLoading ? <Loader2 size={10} className="animate-spin" /> : <Play size={10} />}
           </button>
         </div>
+
+        {/* Params panel - показывается только когда нода selected */}
+        {selected && (
+          <div className="px-3 py-2 border-b border-white/[0.04] space-y-2">
+            <ModelSelector 
+              value={params.model}
+              options={IMAGE_MODELS_EXTENDED}
+              onChange={(v) => setParams({...params, model: v})}
+              category="image"
+            />
+            <div className="flex gap-2 items-center">
+              <AspectRatioSelector 
+                value={params.aspectRatio} 
+                onChange={(v) => setParams({...params, aspectRatio: v})}
+                options={['auto', '1:1', '21:9', '16:9', '9:16', '2:3', '3:4', '5:4', '4:5', '3:2']}
+              />
+              <ResolutionSelector 
+                value={params.resolution} 
+                onChange={(v) => setParams({...params, resolution: v})}
+              />
+              <CountSpinner 
+                value={params.count} 
+                onChange={(v) => setParams({...params, count: v})}
+              />
+            </div>
+          </div>
+        )}
 
         <Handle 
           type="target" 
@@ -87,11 +132,25 @@ export const ImageNode = memo(({ id, data, selected }: NodeProps) => {
           />
         </div>
 
+        {/* Progress bar */}
+        {isLoading && progress > 0 && (
+          <ProgressBar 
+            progress={progress} 
+            currentStep={currentStep}
+            estimatedTime={nodeData?.estimatedTime as number | undefined}
+          />
+        )}
+
         {/* Preview */}
         <div className="px-3 py-2">
-          <div className="w-full h-[140px] bg-black/30 border border-white/[0.03] rounded-lg overflow-hidden flex items-center justify-center">
+          <div className="w-full h-[140px] bg-black/30 border border-white/[0.03] rounded-lg overflow-hidden flex items-center justify-center relative">
             {nodeData?.imageUrl ? (
-              <img src={nodeData.imageUrl as string} alt="Generated" className="w-full h-full object-cover" />
+              <>
+                <img src={nodeData.imageUrl as string} alt="Generated" className="w-full h-full object-cover" />
+                <div className="absolute top-2 right-2">
+                  <DownloadButton url={nodeData.imageUrl as string} filename="image" type="image" />
+                </div>
+              </>
             ) : (
               <span className="text-[10px] text-white/20">
                 {isLoading ? <Loader2 className="animate-spin" size={16} /> : 'NO OUTPUT'}

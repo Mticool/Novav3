@@ -1,6 +1,6 @@
-import { X, Search, Type, Image, Video, Brain, Wand2, Palette, RotateCw, Upload, SplitSquareHorizontal, Sparkles, Move3d } from 'lucide-react';
+import { X, Search, Type, Image, Video, Brain, Wand2, Palette, RotateCw, Upload, SplitSquareHorizontal, Sparkles, Move3d, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
-import { useStore } from '../store/useStore';
+import { useStore, NodeType } from '../store/useStore';
 
 interface AddNodesMenuProps {
   onClose: () => void;
@@ -52,6 +52,14 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
           badge: 'AI',
           badgeColor: 'bg-purple-500/20 text-purple-400',
           type: 'masterPrompt' as const
+        },
+        {
+          icon: MessageSquare,
+          label: 'AI Ассистент',
+          subtitle: 'Генерация идей и промптов',
+          badge: 'GPT-4o',
+          badgeColor: 'bg-green-500/20 text-green-400',
+          type: 'assistant' as const
         },
       ]
     },
@@ -114,7 +122,7 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
     },
   ];
 
-  const handleAddNode = (type: 'text' | 'image' | 'video' | 'masterPrompt' | 'modifier' | 'generator' | 'camera' | 'imageUpload' | 'arraySplitter' | 'comment' | 'enhancement' | 'cameraAngle') => {
+  const handleAddNode = (type: NodeType) => {
     addNode(type);
     onClose();
   };

@@ -14,7 +14,7 @@ import {
 } from '@xyflow/react';
 import { generateText, generateImage, generateVideo, rotateCharacter, AI_MODELS } from '../lib/api';
 
-type NodeType = 'text' | 'image' | 'video' | 'masterPrompt' | 'modifier' | 'generator' | 'camera' | 'imageUpload' | 'arraySplitter' | 'comment' | 'enhancement' | 'cameraAngle';
+export type NodeType = 'text' | 'image' | 'video' | 'masterPrompt' | 'modifier' | 'generator' | 'camera' | 'imageUpload' | 'arraySplitter' | 'comment' | 'enhancement' | 'cameraAngle' | 'assistant';
 
 interface HistorySnapshot {
   nodes: Node[];
@@ -240,6 +240,7 @@ export const useStore = create<StoreState>()((set, get) => ({
         comment: 'Комментарий',
         enhancement: 'Улучшение изображения',
         cameraAngle: 'Угол камеры',
+        assistant: 'AI Помощник',
       };
 
       const currentNodes = get().nodes;
@@ -291,6 +292,7 @@ export const useStore = create<StoreState>()((set, get) => ({
           ...(type === 'camera' && { angle: 0, view: 'front' }),
           ...(type === 'enhancement' && { params: { sharpness: 50, contrast: 50 } }),
           ...(type === 'cameraAngle' && { params: { rotate: 0, vertical: 0, zoom: 1 } }),
+          ...(type === 'assistant' && { prompt: '', response: '' }),
         },
       };
 
@@ -322,6 +324,7 @@ export const useStore = create<StoreState>()((set, get) => ({
       comment: 'Комментарий',
       enhancement: 'Улучшение изображения',
       cameraAngle: 'Угол камеры',
+      assistant: 'AI Помощник',
     };
 
     const currentNodes = get().nodes;
@@ -415,16 +418,31 @@ export const useStore = create<StoreState>()((set, get) => ({
 
     try {
       if (targetNode.type === 'image') {
-        // Use model from node settings or default to QUALITY
+        // Get params from node data (new) or settings (legacy)
+        const nodeParams = typeof targetNode.data.params === 'object' && targetNode.data.params !== null
+          ? targetNode.data.params as Record<string, unknown>
+          : {};
         const nodeSettings = typeof targetNode.data.settings === 'object' && targetNode.data.settings !== null
           ? targetNode.data.settings as Record<string, unknown>
           : {};
-        const model = (nodeSettings?.model as string) || AI_MODELS.IMAGE.QUALITY;
+        
+        const model = (nodeParams?.model as string) || (nodeSettings?.model as string) || AI_MODELS.IMAGE.QUALITY;
+        const aspectRatio = (nodeParams?.aspectRatio as string) || '1:1';
+        
+        // Map aspect ratio to image_size
+        const aspectToSize: Record<string, string> = {
+          '1:1': 'square_hd',
+          '16:9': 'landscape_hd',
+          '9:16': 'portrait_hd',
+          '4:3': 'landscape',
+          '3:4': 'portrait',
+        };
+        
         const imageUrl = await generateImage(
           prompt,
           model,
           {
-            image_size: nodeSettings?.resolution as string,
+            image_size: aspectToSize[aspectRatio] || nodeSettings?.resolution as string,
             steps: nodeSettings?.steps as number,
             guidance: nodeSettings?.guidance as number,
             seed: nodeSettings?.seed as number,
@@ -436,19 +454,34 @@ export const useStore = create<StoreState>()((set, get) => ({
           progress: 100
         });
       } else if (targetNode.type === 'video') {
-        // Use model from node settings or default to REALISTIC
+        // Get params from node data (new) or settings (legacy)
+        const nodeParams = typeof targetNode.data.params === 'object' && targetNode.data.params !== null
+          ? targetNode.data.params as Record<string, unknown>
+          : {};
         const nodeSettings = typeof targetNode.data.settings === 'object' && targetNode.data.settings !== null
           ? targetNode.data.settings as Record<string, unknown>
           : {};
-        const model = (nodeSettings?.model as string) || AI_MODELS.VIDEO.REALISTIC;
+        
+        const model = (nodeParams?.model as string) || (nodeSettings?.model as string) || AI_MODELS.VIDEO.REALISTIC;
+        const aspectRatio = (nodeParams?.aspectRatio as string) || '16:9';
+        const duration = (nodeParams?.duration as number) || (nodeSettings?.duration as number) || 5;
+        const fps = (nodeParams?.fps as number) || (nodeSettings?.fps as number) || 30;
+        
+        // Map aspect ratio to image_size
+        const aspectToSize: Record<string, string> = {
+          '16:9': 'landscape_hd',
+          '9:16': 'portrait_hd',
+          '1:1': 'square_hd',
+        };
+        
         const videoUrl = await generateVideo(
           prompt,
           model,
           {
             imageUrl: undefined, // Text to video
-            image_size: nodeSettings?.resolution as string,
-            duration: nodeSettings?.duration as number,
-            fps: nodeSettings?.fps as number,
+            image_size: aspectToSize[aspectRatio] || nodeSettings?.resolution as string,
+            duration,
+            fps,
             guidance: nodeSettings?.guidance as number,
           }
         );

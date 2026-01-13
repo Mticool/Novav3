@@ -2,14 +2,28 @@ import { memo, useState } from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { Play, Loader2, Video as VideoIcon } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { VIDEO_MODELS_EXTENDED } from '../../lib/api';
+import { ModelSelector } from '../NodeParams/ModelSelector';
+import { AspectRatioSelector } from '../NodeParams/AspectRatioSelector';
+import { DurationSelector } from '../NodeParams/DurationSelector';
+import { FPSSelector } from '../NodeParams/FPSSelector';
+import { DownloadButton } from '../NodeParams/DownloadButton';
+import { ProgressBar } from '../NodeParams/ProgressBar';
 
 export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
   const generateFromText = useStore(s => s.generateFromText);
+  const updateNode = useStore(s => s.updateNode);
   const nodes = useStore(s => s.nodes);
   const edges = useStore(s => s.edges);
 
   const nodeData = data as Record<string, unknown>;
   const [prompt, setPrompt] = useState<string>('');
+  const [params, setParams] = useState({
+    model: 'kling-2.6',
+    aspectRatio: '16:9',
+    duration: 5,
+    fps: 30
+  });
 
   const handleGenerate = async () => {
     const incomingEdge = edges.find(e => e.target === id);
@@ -21,10 +35,14 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
     const sourceNode = nodes.find(n => n.id === incomingEdge.source);
     if (!sourceNode) return;
 
+    // Save params to node data
+    updateNode(id, { params });
     await generateFromText(sourceNode.id, id);
   };
 
   const isLoading = nodeData?.state === 'loading';
+  const progress = (nodeData?.progress as number) || 0;
+  const currentStep = nodeData?.currentStep as string | undefined;
 
   return (
     <div className="w-[330px] relative">
@@ -32,10 +50,6 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
         data-state={(nodeData?.state as string) || 'idle'}
         className={`node-card ${selected ? 'selected' : ''}`}
       >
-        <Handle type="target" position={Position.Left} id="start-image" style={{ top: '60px' }} />
-        <Handle type="target" position={Position.Left} id="end-image" style={{ top: '90px' }} />
-        <Handle type="target" position={Position.Left} id="text-input" style={{ top: '120px' }} />
-
         {/* Header */}
         <div className="flex items-center gap-2 px-3 py-2 border-b border-white/[0.04]">
           <VideoIcon size={12} className="opacity-50" />
@@ -50,6 +64,37 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
             {isLoading ? <Loader2 size={10} className="animate-spin" /> : <Play size={10} />}
           </button>
         </div>
+
+        {/* Params panel - показывается только когда нода selected */}
+        {selected && (
+          <div className="px-3 py-2 border-b border-white/[0.04] space-y-2">
+            <ModelSelector 
+              value={params.model}
+              options={VIDEO_MODELS_EXTENDED}
+              onChange={(v) => setParams({...params, model: v})}
+              category="video"
+            />
+            <div className="flex gap-2 flex-wrap items-center">
+              <AspectRatioSelector 
+                value={params.aspectRatio} 
+                onChange={(v) => setParams({...params, aspectRatio: v})}
+                options={['auto', '16:9', '9:16', '1:1', '21:9', '4:3', '3:4']}
+              />
+              <DurationSelector 
+                value={params.duration} 
+                onChange={(v) => setParams({...params, duration: v})}
+              />
+              <FPSSelector 
+                value={params.fps} 
+                onChange={(v) => setParams({...params, fps: v})}
+              />
+            </div>
+          </div>
+        )}
+
+        <Handle type="target" position={Position.Left} id="start-image" style={{ top: '60px' }} />
+        <Handle type="target" position={Position.Left} id="end-image" style={{ top: '90px' }} />
+        <Handle type="target" position={Position.Left} id="text-input" style={{ top: '120px' }} />
 
         {/* Входы */}
         <div className="px-3 pt-3 space-y-2">
@@ -73,11 +118,25 @@ export const VideoNode = memo(({ id, data, selected }: NodeProps) => {
           />
         </div>
 
+        {/* Progress bar */}
+        {isLoading && progress > 0 && (
+          <ProgressBar 
+            progress={progress} 
+            currentStep={currentStep}
+            estimatedTime={nodeData?.estimatedTime as number | undefined}
+          />
+        )}
+
         {/* Preview */}
         <div className="px-3 py-2">
-          <div className="w-full h-[140px] bg-black/30 border border-white/[0.03] rounded-lg overflow-hidden flex items-center justify-center">
+          <div className="w-full h-[140px] bg-black/30 border border-white/[0.03] rounded-lg overflow-hidden flex items-center justify-center relative">
             {nodeData?.videoUrl && typeof nodeData.videoUrl === 'string' ? (
-              <video src={nodeData.videoUrl} controls className="w-full h-full object-cover" />
+              <>
+                <video src={nodeData.videoUrl} controls className="w-full h-full object-cover" />
+                <div className="absolute top-2 right-2">
+                  <DownloadButton url={nodeData.videoUrl} filename="video" type="video" />
+                </div>
+              </>
             ) : (
               <span className="text-[10px] text-white/20">
                 {isLoading ? <Loader2 className="animate-spin" size={16} /> : 'NO OUTPUT'}

@@ -2,6 +2,7 @@ import { memo, useState } from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { Loader2, Play, Zap } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { DownloadButton } from '../NodeParams/DownloadButton';
 
 export const GeneratorNode = memo(({ id, data, selected }: NodeProps) => {
   const generateFromText = useStore(s => s.generateFromText);
@@ -62,13 +63,22 @@ export const GeneratorNode = memo(({ id, data, selected }: NodeProps) => {
 
         {/* Preview */}
         <div className="px-3 py-2">
-          <div className="w-full h-[140px] bg-black/30 border border-white/[0.03] rounded-lg overflow-hidden flex items-center justify-center">
+          <div className="w-full h-[140px] bg-black/30 border border-white/[0.03] rounded-lg overflow-hidden flex items-center justify-center relative">
             {nodeData?.outputUrl && typeof nodeData.outputUrl === 'string' ? (
-              mode === 'video' ? (
-                <video src={nodeData.outputUrl} controls className="w-full h-full object-cover" />
-              ) : (
-                <img src={nodeData.outputUrl} alt="Generated" className="w-full h-full object-cover" />
-              )
+              <>
+                {mode === 'video' ? (
+                  <video src={nodeData.outputUrl} controls className="w-full h-full object-cover" />
+                ) : (
+                  <img src={nodeData.outputUrl} alt="Generated" className="w-full h-full object-cover" />
+                )}
+                <div className="absolute top-2 right-2">
+                  <DownloadButton 
+                    url={nodeData.outputUrl} 
+                    filename={mode === 'image' ? 'generated-image' : 'generated-video'} 
+                    type={mode} 
+                  />
+                </div>
+              </>
             ) : (
               <span className="text-[10px] text-white/20">
                 {isLoading ? <Loader2 className="animate-spin" size={16} /> : 'NO OUTPUT'}
