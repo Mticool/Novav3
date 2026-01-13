@@ -727,34 +727,63 @@ export const useStore = create<StoreState>()((set, get) => ({
           continue;
         }
 
-        // Get source node
-        const sourceEdge = incomingEdges[0];
-        const sourceNode = get().nodes.find(n => n.id === sourceEdge.source);
-        if (!sourceNode) {
-          console.log('⚠️ Source node not found');
-          continue;
+        // Collect input data from all incoming nodes
+        const inputData: Record<string, unknown> = {};
+        for (const edge of incomingEdges) {
+          const sourceNode = get().nodes.find(n => n.id === edge.source);
+          if (sourceNode) {
+            const handleId = edge.targetHandle || 'default';
+            if (sourceNode.type === 'text' || sourceNode.type === 'masterPrompt') {
+              inputData[handleId] = {
+                type: 'text',
+                content: sourceNode.data.content,
+                nodeId: sourceNode.id,
+              };
+            } else if (sourceNode.type === 'image' || sourceNode.type === 'imageUpload') {
+              inputData[handleId] = {
+                type: 'image',
+                url: sourceNode.data.imageUrl,
+                nodeId: sourceNode.id,
+              };
+            } else if (sourceNode.type === 'video') {
+              inputData[handleId] = {
+                type: 'video',
+                url: sourceNode.data.videoUrl,
+                nodeId: sourceNode.id,
+              };
+            }
+          }
         }
 
-        console.log('🔄 Executing:', currentNode.type, nodeId);
+        console.log('🔄 Executing:', currentNode.type, nodeId, 'with inputs:', Object.keys(inputData));
 
-        // Execute based on node type
+        // Execute based on node type with collected inputs
         try {
           if (currentNode.type === 'image') {
-            if (sourceNode.type === 'text' || sourceNode.type === 'masterPrompt') {
-              await get().generateFromText(sourceNode.id, nodeId);
+            // Find text input
+            const textInput = Object.values(inputData).find((input: any) => input.type === 'text');
+            if (textInput) {
+              await get().generateFromText((textInput as any).nodeId, nodeId);
             }
           } else if (currentNode.type === 'video') {
-            if (sourceNode.type === 'image') {
-              await get().generateVideoFromImage(sourceNode.id, nodeId);
-            } else if (sourceNode.type === 'text' || sourceNode.type === 'masterPrompt') {
-              await get().generateFromText(sourceNode.id, nodeId);
+            // Check for image input first (image-to-video)
+            const imageInput = Object.values(inputData).find((input: any) => input.type === 'image');
+            if (imageInput) {
+              await get().generateVideoFromImage((imageInput as any).nodeId, nodeId);
+            } else {
+              // Fallback to text-to-video
+              const textInput = Object.values(inputData).find((input: any) => input.type === 'text');
+              if (textInput) {
+                await get().generateFromText((textInput as any).nodeId, nodeId);
+              }
             }
           } else if (currentNode.type === 'camera') {
-            if (sourceNode.type === 'image' && sourceNode.data.imageUrl) {
+            const imageInput = Object.values(inputData).find((input: any) => input.type === 'image');
+            if (imageInput && (imageInput as any).url) {
               const nodeData = currentNode.data as Record<string, unknown>;
               const angle = (nodeData?.angle as number) || 0;
               const view = (nodeData?.view as string) || 'front';
-              await get().rotateCamera(sourceNode.id, nodeId, angle, view);
+              await get().rotateCamera((imageInput as any).nodeId, nodeId, angle, view);
             }
           }
         } catch (error) {

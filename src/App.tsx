@@ -179,6 +179,48 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
                   setConnectStart(null);
                   return;
                 }
+                
+                // Determine edge color based on connection type
+                let edgeColor = '#22dd88'; // Default green
+                let animated = false;
+                
+                // Text → Image: Green
+                if ((sourceNode.type === 'text' || sourceNode.type === 'masterPrompt') && 
+                    targetNode.type === 'image') {
+                  edgeColor = '#22dd88';
+                  animated = true;
+                }
+                // Image → Video: Blue
+                else if (sourceNode.type === 'image' && targetNode.type === 'video') {
+                  edgeColor = '#3b82f6';
+                  animated = true;
+                }
+                // Text → Video: Purple
+                else if ((sourceNode.type === 'text' || sourceNode.type === 'masterPrompt') && 
+                         targetNode.type === 'video') {
+                  edgeColor = '#a855f7';
+                  animated = true;
+                }
+                // Image → Camera: Cyan
+                else if (sourceNode.type === 'image' && targetNode.type === 'camera') {
+                  edgeColor = '#06b6d4';
+                  animated = true;
+                }
+                
+                // Create connection with styled edge
+                const styledConnection = {
+                  ...c,
+                  animated,
+                  style: {
+                    stroke: edgeColor,
+                    strokeWidth: 2,
+                  },
+                };
+                
+                setSuggestMenu(null);
+                setConnectStart(null);
+                onConnect(styledConnection);
+                return;
               }
             }
             
