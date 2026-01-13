@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { CanvasEmptyState } from './components/CanvasEmptyState';
 import { LandingPage } from './components/LandingPage';
 
-import { ImageNode } from './components/nodes/ImageNode';
 import { TextNode } from './components/nodes/TextNode';
-import { VideoNode } from './components/nodes/VideoNode';
+import { ImageGeneratorNode } from './components/nodes/ImageGeneratorNode';
+import { VideoGeneratorNode } from './components/nodes/VideoGeneratorNode';
 import { MasterPromptNode } from './components/nodes/MasterPromptNode';
 import { ModifierNode } from './components/nodes/ModifierNode';
 import { GeneratorNode } from './components/nodes/GeneratorNode';
@@ -35,9 +35,9 @@ import { isValidConnection, wouldCreateCycle, getConnectionErrorMessage } from '
 
 
 const nodeTypes = {
-  image: ImageNode,
+  image: ImageGeneratorNode,
   text: TextNode,
-  video: VideoNode,
+  video: VideoGeneratorNode,
   masterPrompt: MasterPromptNode,
   modifier: ModifierNode,
   generator: GeneratorNode,
@@ -231,7 +231,7 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
           panOnScroll={true}
           panOnScrollMode={'all' as any}
           fitView
-          className="bg-[#1a1a1a]"
+          className="bg-[#141414]"
           deleteKeyCode="Delete"
           multiSelectionKeyCode="Shift"
           snapToGrid={true}

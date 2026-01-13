@@ -12,7 +12,7 @@
   --node-bg: #1f1f1f;
   --node-border: rgba(255, 255, 255, 0.1);
   --node-border-hover: rgba(255, 255, 255, 0.15);
-  --node-border-selected: #0099ff;
+  --node-border-selected: #00a8ff;
   --text-primary: #ffffff;
   --text-secondary: #cccccc;
   --text-tertiary: #888888;
@@ -23,16 +23,17 @@
   
   /* РАЗМЕРЫ (PIKASO) */
   --handle-size: 8px;
-  --node-radius: 18px;
+  --node-radius: 16px;
   --node-padding: 20px;
   --node-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   --node-shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.5);
-  --node-shadow-selected: 0 0 0 3px rgba(0, 153, 255, 0.2), 0 8px 32px rgba(0, 153, 255, 0.3);
+  --node-shadow-selected: 0 0 0 3px rgba(0, 168, 255, 0.2), 0 8px 32px rgba(0, 168, 255, 0.3);
 }
 
 /* ОСНОВНОЙ ШРИФТ */
-* {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+html,
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -66,28 +67,48 @@
    NODE CARD (PIKASO STYLE)
    =========================================== */
 
-.react-flow__node,
 .node-card {
   background: #1f1f1f !important;
   border: 2px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 18px !important;
+  border-radius: 16px !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
   padding: 0;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.react-flow__node:hover {
+.node-card:hover {
   border-color: rgba(255, 255, 255, 0.15) !important;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5) !important;
 }
 
-.react-flow__node.selected,
 .node-card.selected {
-  border-color: #0099ff !important;
+  border-color: #00a8ff !important;
   box-shadow: 
-    0 0 0 3px rgba(0, 153, 255, 0.2),
-    0 8px 32px rgba(0, 153, 255, 0.3) !important;
+    0 0 0 3px rgba(0, 168, 255, 0.2),
+    0 8px 32px rgba(0, 168, 255, 0.3) !important;
+}
+
+/* ===========================================
+   PIKASO NODE (новые ноды генераторов)
+   =========================================== */
+
+.pikaso-node {
+  background: #1f1f1f;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  min-width: 420px;
+  padding: 20px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.pikaso-node:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.pikaso-node.selected {
+  border: 2px solid #00a8ff;
+  box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.2);
 }
 
 /* Состояния нод */
@@ -107,14 +128,31 @@
 }
 
 /* Заголовок ноды */
+/* Точный блок из требований */
+.node {
+  background: #1f1f1f;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  min-width: 420px;
+  padding: 20px;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+/* Выделенная нода */
+.node.selected {
+  border: 2px solid #00a8ff; /* Голубой! */
+  box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.2);
+}
+
+/* Заголовок */
 .node-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   font-size: 15px;
   font-weight: 600;
   color: #ffffff;
-  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
 .node-header-icon {
@@ -126,21 +164,47 @@
 /* Текстовое поле внутри ноды */
 .node-textarea {
   width: 100%;
-  min-height: 80px;
+  min-height: 120px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 12px;
-  color: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 14px;
+  width: 100%;
   resize: none;
   outline: none;
   transition: all 0.2s ease;
 }
 
+.node-textarea::placeholder {
+  font-size: 14px;
+  font-weight: 400;
+  color: #ffffff;
+  opacity: 0.6;
+}
+
+/* Лейблы (13px, weight 500) */
+.node-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+}
+
 .node-textarea:focus {
   background: rgba(255, 255, 255, 0.08);
-  border-color: #0099ff;
+  border-color: #00a8ff;
+}
+
+/* Селекты моделей (как в Pikaso) */
+.model-selector {
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 /* Панель действий над нодой */
@@ -150,10 +214,29 @@
   left: 50%;
   transform: translateX(-50%);
   background: #2a2a2a;
-  border-radius: 12px;
-  padding: 8px 16px;
+  border-radius: 10px;
+  padding: 8px 12px;
   display: flex;
   gap: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+/* Панель над нодой (точный блок из требований) */
+.node-toolbar {
+  position: absolute;
+  top: -50px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  gap: 8px;
+}
+
+/* Доп. позиционирование (центрирование над нодой) */
+.node-toolbar--center {
+  left: 50%;
+  transform: translateX(-50%);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   z-index: 10;
 }
@@ -374,7 +457,7 @@ input[type="range"].slider::-moz-range-thumb:hover {
    =========================================== */
 
 /* Node Header */
-.node-header {
+.node-card .node-header {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -382,14 +465,14 @@ input[type="range"].slider::-moz-range-thumb:hover {
   border-bottom: 1px solid var(--node-border);
 }
 
-.node-title {
+.node-card .node-title {
   font-size: 12px;
   font-weight: 600;
   color: var(--text-primary);
   flex: 1;
 }
 
-.node-icon {
+.node-card .node-icon {
   width: 12px;
   height: 12px;
   color: var(--text-secondary);
