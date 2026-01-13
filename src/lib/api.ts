@@ -22,31 +22,39 @@ export const AI_MODELS = {
 
 // Extended model list with generation times (like Freepik Pikaso)
 export const IMAGE_MODELS_EXTENDED = [
-  // Fast models
-  { id: 'nano-banana-pro', name: 'Nano Banana Pro', time: '~3s', quality: 'High', category: 'fast' },
-  { id: 'z-image', name: 'Z-Image', time: '~5s', quality: 'High', category: 'fast' },
-  // Quality models  
-  { id: 'gpt-image-1.5', name: 'GPT Image 1.5', time: '~8s', quality: 'Ultra', category: 'quality' },
-  { id: 'seedream-4.5', name: 'Seedream 4.5', time: '~55s', quality: 'Max', category: 'quality' },
-  { id: 'seedream-4.0', name: 'Seedream 4.0', time: '~27s', quality: 'Ultra', category: 'quality' },
-  { id: 'grok-imagine', name: 'Grok Imagine', time: '~10s', quality: 'Ultra', category: 'quality' },
+  // Nano Banana Pro (Laozhang.ai) - Different resolutions
+  { id: 'nano-banana-pro-4k', name: 'Nano Banana Pro 4K', time: '~8s', quality: 'Ultra', category: 'quality', provider: 'laozhang' },
+  { id: 'nano-banana-pro-2k', name: 'Nano Banana Pro 2K', time: '~5s', quality: 'High', category: 'quality', provider: 'laozhang' },
+  { id: 'nano-banana-pro', name: 'Nano Banana Pro', time: '~3s', quality: 'High', category: 'fast', provider: 'laozhang' },
+  // Fast models (Kie.ai)
+  { id: 'z-image', name: 'Z-Image', time: '~5s', quality: 'High', category: 'fast', provider: 'kie' },
+  // Quality models (Kie.ai)
+  { id: 'gpt-image-1.5', name: 'GPT Image 1.5', time: '~8s', quality: 'Ultra', category: 'quality', provider: 'kie' },
+  { id: 'seedream-4.5', name: 'Seedream 4.5', time: '~55s', quality: 'Max', category: 'quality', provider: 'kie' },
+  { id: 'seedream-4.0', name: 'Seedream 4.0', time: '~27s', quality: 'Ultra', category: 'quality', provider: 'kie' },
+  { id: 'grok-imagine', name: 'Grok Imagine', time: '~10s', quality: 'Ultra', category: 'quality', provider: 'kie' },
 ] as const;
 
 export const VIDEO_MODELS_EXTENDED = [
-  // Quality / Cinema models
-  { id: 'kling-2.6-motion-control', name: 'Kling 2.6 Motion Control', time: '~60s', quality: 'Ultra', category: 'quality' },
-  { id: 'seedance-1.5-pro', name: 'Seedance 1.5 Pro', time: '~55s', quality: 'Ultra', category: 'quality' },
-  { id: 'wan-2.6', name: 'Wan 2.6', time: '~50s', quality: 'Ultra', category: 'quality' },
-  { id: 'kling-2.6', name: 'Kling 2.6', time: '~45s', quality: 'Ultra', category: 'quality' },
-  { id: 'grok-imagine', name: 'Grok Imagine', time: '~40s', quality: 'Ultra', category: 'quality' },
-  { id: 'veo-3.1', name: 'Veo 3.1', time: '~60s', quality: 'Cinema', category: 'cinema' },
-  { id: 'sora-2', name: 'Sora 2', time: '~90s', quality: 'Cinema', category: 'cinema' },
-  // Fast models
-  { id: 'kling-2.5-turbo', name: 'Kling 2.5 Turbo', time: '~25s', quality: 'High', category: 'fast' },
-  { id: 'wan-2.5', name: 'Wan 2.5', time: '~30s', quality: 'High', category: 'fast' },
-  { id: 'wan-2.2', name: 'Wan 2.2', time: '~20s', quality: 'Medium', category: 'fast' },
-  { id: 'seedance-1.0', name: 'Seedance 1.0', time: '~25s', quality: 'High', category: 'fast' },
-  { id: 'kling-2.1', name: 'Kling 2.1', time: '~30s', quality: 'High', category: 'fast' },
+  // Cinema / Pro models (Laozhang.ai)
+  { id: 'sora-2-pro', name: 'Sora 2 Pro', time: '~90s', quality: 'Cinema', category: 'cinema', provider: 'laozhang' },
+  { id: 'sora-2', name: 'Sora 2', time: '~60s', quality: 'Cinema', category: 'cinema', provider: 'laozhang' },
+  { id: 'sora-2-landscape', name: 'Sora 2 Landscape', time: '~60s', quality: 'Cinema', category: 'cinema', provider: 'laozhang' },
+  { id: 'sora-2-portrait', name: 'Sora 2 Portrait', time: '~60s', quality: 'Cinema', category: 'cinema', provider: 'laozhang' },
+  { id: 'veo-3.1', name: 'Veo 3.1', time: '~60s', quality: 'Cinema', category: 'cinema', provider: 'laozhang' },
+  { id: 'veo-3.1-fast', name: 'Veo 3.1 Fast', time: '~30s', quality: 'High', category: 'fast', provider: 'laozhang' },
+  // Quality / Cinema models (Kie.ai)
+  { id: 'kling-2.6-motion-control', name: 'Kling 2.6 Motion Control', time: '~60s', quality: 'Ultra', category: 'quality', provider: 'kie' },
+  { id: 'seedance-1.5-pro', name: 'Seedance 1.5 Pro', time: '~55s', quality: 'Ultra', category: 'quality', provider: 'kie' },
+  { id: 'wan-2.6', name: 'Wan 2.6', time: '~50s', quality: 'Ultra', category: 'quality', provider: 'kie' },
+  { id: 'kling-2.6', name: 'Kling 2.6', time: '~45s', quality: 'Ultra', category: 'quality', provider: 'kie' },
+  { id: 'grok-imagine', name: 'Grok Imagine', time: '~40s', quality: 'Ultra', category: 'quality', provider: 'kie' },
+  // Fast models (Kie.ai)
+  { id: 'kling-2.5-turbo', name: 'Kling 2.5 Turbo', time: '~25s', quality: 'High', category: 'fast', provider: 'kie' },
+  { id: 'wan-2.5', name: 'Wan 2.5', time: '~30s', quality: 'High', category: 'fast', provider: 'kie' },
+  { id: 'wan-2.2', name: 'Wan 2.2', time: '~20s', quality: 'Medium', category: 'fast', provider: 'kie' },
+  { id: 'seedance-1.0', name: 'Seedance 1.0', time: '~25s', quality: 'High', category: 'fast', provider: 'kie' },
+  { id: 'kling-2.1', name: 'Kling 2.1', time: '~30s', quality: 'High', category: 'fast', provider: 'kie' },
 ] as const;
 
 // Upscale models for image and video enhancement
@@ -56,6 +64,7 @@ export const UPSCALE_MODELS_EXTENDED = [
 ] as const;
 
 const KIE_BASE_URL = 'https://api.kie.ai/api/v1';
+const LAOZHANG_BASE_URL = 'https://api.laozhang.ai/v1';
 
 // ==================== API KEY MANAGEMENT ====================
 
@@ -72,6 +81,11 @@ const getKieKey = () => {
 // Deprecated: For backwards compatibility
 const getFalKey = () => {
   const key = localStorage.getItem('fal_api_key') || import.meta.env.VITE_FAL_KEY || '';
+  return key.trim();
+};
+
+const getLaozhangKey = () => {
+  const key = localStorage.getItem('laozhang_api_key') || import.meta.env.VITE_LAOZHANG_KEY || '';
   return key.trim();
 };
 
@@ -362,7 +376,7 @@ class KieClient {
 
 // ==================== PUBLIC API FUNCTIONS ====================
 
-export function updateApiKeys(openaiKey?: string, kieKey?: string, falKey?: string) {
+export function updateApiKeys(openaiKey?: string, kieKey?: string, falKey?: string, laozhangKey?: string) {
   if (openaiKey !== undefined) {
     localStorage.setItem('openai_api_key', openaiKey.trim());
     initOpenAI();
@@ -373,13 +387,17 @@ export function updateApiKeys(openaiKey?: string, kieKey?: string, falKey?: stri
   if (falKey !== undefined) {
     localStorage.setItem('fal_api_key', falKey.trim());
   }
+  if (laozhangKey !== undefined) {
+    localStorage.setItem('laozhang_api_key', laozhangKey.trim());
+  }
 }
 
-export function hasApiKeys(): { hasKie: boolean; hasOpenAI: boolean; hasFal: boolean } {
+export function hasApiKeys(): { hasKie: boolean; hasOpenAI: boolean; hasFal: boolean; hasLaozhang: boolean } {
   return {
     hasKie: !!getKieKey(),
     hasOpenAI: !!getOpenAIKey(),
     hasFal: !!getFalKey(),
+    hasLaozhang: !!getLaozhangKey(),
   };
 }
 
@@ -431,7 +449,10 @@ export async function generateText(prompt: string, imageUrls: string[] = []): Pr
   }
 }
 
-// ==================== KIE.AI: Image Generation ====================
+// ==================== IMAGE GENERATION (Multi-Provider) ====================
+
+// Image models that should be routed to laozhang.ai
+const LAOZHANG_IMAGE_MODELS = ['nano-banana-pro', 'nano-banana-pro-2k', 'nano-banana-pro-4k'];
 
 export async function generateImage(
   prompt: string,
@@ -443,6 +464,61 @@ export async function generateImage(
     seed?: number;
   }
 ): Promise<string> {
+  // Route to Laozhang.ai for Nano Banana Pro models
+  if (LAOZHANG_IMAGE_MODELS.includes(model)) {
+    const laozhangKey = getLaozhangKey();
+    if (!laozhangKey) {
+      throw new Error('Laozhang.ai API key not configured. Please add it for Nano Banana Pro models.');
+    }
+
+    // Map model to API model name
+    const modelMap: Record<string, string> = {
+      'nano-banana-pro': 'nano-banana-pro',
+      'nano-banana-pro-2k': 'nano-banana-pro-2k',
+      'nano-banana-pro-4k': 'nano-banana-pro-4k',
+    };
+    const apiModel = modelMap[model] || model;
+
+    console.log('🖼️ Laozhang.ai Image Generation:', model, '->', apiModel);
+
+    const response = await fetch(`${LAOZHANG_BASE_URL}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${laozhangKey}`,
+      },
+      body: JSON.stringify({
+        model: apiModel,
+        messages: [
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Laozhang.ai API error: ${response.status} - ${errorText}`);
+    }
+
+    const data = await response.json();
+    const content = data.choices?.[0]?.message?.content;
+
+    // Extract image URL from response
+    if (typeof content === 'string') {
+      if (content.startsWith('http')) return content;
+      const urlMatch = content.match(/https?:\/\/[^\s"<>]+/);
+      if (urlMatch) return urlMatch[0];
+    }
+    if (data.url) return data.url;
+    if (data.image_url) return data.image_url;
+
+    throw new Error('Could not extract image URL from response');
+  }
+
+  // Route to Kie.ai for other models
   const kieKey = getKieKey();
   if (!kieKey) {
     throw new Error('Kie.ai API key not configured. Please add it in settings.');
@@ -459,7 +535,121 @@ export async function generateImage(
   });
 }
 
-// ==================== KIE.AI: Video Generation ====================
+// ==================== LAOZHANG.AI CLIENT (Sora 2 / Veo 3.1) ====================
+
+// Models that should be routed to laozhang.ai (video only)
+const LAOZHANG_MODELS = [
+  'sora-2', 'sora-2-pro', 'sora-2-landscape', 'sora-2-portrait',
+  'veo-3.1', 'veo-3.1-fast'
+];
+
+class LaozhangClient {
+  private apiKey: string;
+  private baseUrl: string;
+
+  constructor(apiKey: string, baseUrl: string = LAOZHANG_BASE_URL) {
+    this.apiKey = apiKey;
+    this.baseUrl = baseUrl;
+  }
+
+  async generateVideo(params: {
+    model: string;
+    prompt: string;
+    imageUrl?: string;
+    aspectRatio?: string;
+    duration?: number;
+  }): Promise<string> {
+    try {
+      // Map model ID to laozhang.ai model name
+      const modelMap: Record<string, string> = {
+        'sora-2': 'sora_video2',
+        'sora-2-pro': 'sora_video2-pro',
+        'sora-2-landscape': 'sora_video2-landscape',
+        'sora-2-portrait': 'sora_video2-portrait',
+        'veo-3.1': 'veo-3.1',
+        'veo-3.1-fast': 'veo-3.1-fast',
+      };
+
+      const apiModel = modelMap[params.model] || params.model;
+      console.log('🎬 Laozhang.ai Video Generation:', params.model, '->', apiModel);
+
+      // Build message content (text or text + image)
+      const userContent: Array<{ type: string; text?: string; image_url?: { url: string } }> = [
+        { type: 'text', text: params.prompt },
+      ];
+
+      if (params.imageUrl) {
+        userContent.push({
+          type: 'image_url',
+          image_url: { url: params.imageUrl },
+        });
+      }
+
+      const response = await fetch(`${this.baseUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`,
+        },
+        body: JSON.stringify({
+          model: apiModel,
+          messages: [
+            {
+              role: 'user',
+              content: userContent,
+            },
+          ],
+          stream: false,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        let errorJson;
+        try {
+          errorJson = JSON.parse(errorText);
+        } catch {
+          // ignore
+        }
+        throw new Error(errorJson?.error?.message || errorJson?.msg || `Laozhang.ai API error: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+
+      // Extract video URL from response
+      const content = data.choices?.[0]?.message?.content;
+
+      if (typeof content === 'string') {
+        // Check if content is a URL
+        if (content.startsWith('http')) {
+          return content;
+        }
+        // Try to parse as JSON that might contain URL
+        try {
+          const parsed = JSON.parse(content);
+          if (parsed.url) return parsed.url;
+          if (parsed.video_url) return parsed.video_url;
+        } catch {
+          // Content might be plain text - check for URL pattern
+          const urlMatch = content.match(/https?:\/\/[^\s"<>]+/);
+          if (urlMatch) return urlMatch[0];
+        }
+      }
+
+      // Check data.url directly (some API formats)
+      if (data.url) return data.url;
+      if (data.video_url) return data.video_url;
+
+      console.error('Laozhang.ai Response:', data);
+      throw new Error('Could not extract video URL from response');
+    } catch (error) {
+      console.error('Laozhang.ai Video Error:', error);
+      throw error;
+    }
+  }
+}
+
+// ==================== VIDEO GENERATION (Multi-Provider) ====================
 
 export async function generateVideo(
   prompt: string,
@@ -472,14 +662,32 @@ export async function generateVideo(
     guidance?: number;
   }
 ): Promise<string> {
+  const apiRatio = resolveAspectRatio(options?.image_size || '16:9');
+
+  // Route to Laozhang.ai for Sora 2 / Veo models
+  if (LAOZHANG_MODELS.includes(model)) {
+    const laozhangKey = getLaozhangKey();
+    if (!laozhangKey) {
+      throw new Error('Laozhang.ai API key not configured. Please add it in settings for Sora 2 / Veo models.');
+    }
+
+    const client = new LaozhangClient(laozhangKey);
+    return await client.generateVideo({
+      model,
+      prompt,
+      imageUrl: options?.imageUrl,
+      aspectRatio: apiRatio,
+      duration: options?.duration || 5,
+    });
+  }
+
+  // Route to Kie.ai for other models
   const kieKey = getKieKey();
   if (!kieKey) {
     throw new Error('Kie.ai API key not configured. Please add it in settings.');
   }
 
   const client = new KieClient(kieKey);
-  const apiRatio = resolveAspectRatio(options?.image_size || '16:9');
-
   return await client.generateVideo({
     model,
     prompt,

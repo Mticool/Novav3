@@ -3,59 +3,43 @@ import { NodeProps } from '@xyflow/react';
 import { MessageSquare } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 
-/**
- * CommentNode - Узел комментария/метки секции
- * Стиль: как в Pletor.ai - бежевый/оранжевый фон, без handles
- */
 export const CommentNode = memo(({ id, data, selected }: NodeProps) => {
-    const updateNode = useStore(s => s.updateNode);
-    const nodeData = data as Record<string, unknown>;
-    const [isEditing, setIsEditing] = useState(false);
-    const [title, setTitle] = useState((nodeData?.title as string) || 'Комментарий');
+  const updateNode = useStore(s => s.updateNode);
+  const nodeData = data as Record<string, unknown>;
+  const [comment, setComment] = useState<string>((nodeData?.comment as string) || '');
 
-    const handleSave = () => {
-        updateNode(id, { title });
-        setIsEditing(false);
-    };
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newComment = e.target.value;
+    setComment(newComment);
+    updateNode(id, { comment: newComment });
+  };
 
-    return (
-        <div
-            className={`
-        node-card
-        bg-amber-500/20
-        border border-amber-500/40
-        ${selected ? 'selected' : ''}
-      `}
-        >
-            {/* No handles - this is a comment/label node */}
-
-            <div className="flex items-start gap-2">
-                <MessageSquare
-                    size={16}
-                    className="text-amber-400/80 mt-0.5 flex-shrink-0"
-                />
-
-                {isEditing ? (
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        onBlur={handleSave}
-                        onKeyDown={(e) => e.key === 'Enter' && handleSave()}
-                        className="flex-1 bg-transparent border-none text-sm text-amber-100 outline-none placeholder:text-amber-300/50"
-                        autoFocus
-                    />
-                ) : (
-                    <span
-                        onClick={() => setIsEditing(true)}
-                        className="text-sm text-amber-100 font-medium cursor-text leading-relaxed"
-                    >
-                        {title}
-                    </span>
-                )}
-            </div>
+  return (
+    <div className="w-[280px] relative">
+      <div
+        className={`node-card border-yellow-500/20 ${selected ? 'selected' : ''}`}
+      >
+        {/* Header */}
+        <div className="flex items-center gap-2 px-3 py-2 border-b border-white/[0.04]">
+          <MessageSquare size={12} className="opacity-50 text-yellow-400" />
+          <span className="text-[11px] font-medium text-white/65 flex-1">
+            {(nodeData?.title as string) || 'Comment'}
+          </span>
         </div>
-    );
+
+        {/* Content */}
+        <div className="p-3">
+          <textarea
+            value={comment}
+            onChange={handleCommentChange}
+            placeholder="Add comment..."
+            className="w-full min-h-[80px] bg-black/30 border border-white/[0.03] rounded-lg px-3 py-2 text-[12px] text-white/80 placeholder:text-white/20 outline-none focus:border-yellow-500/30 resize-none"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      </div>
+    </div>
+  );
 });
 
 CommentNode.displayName = 'CommentNode';

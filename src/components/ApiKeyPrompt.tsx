@@ -2,20 +2,21 @@ import { memo, useState } from 'react';
 import { AlertCircle, Sparkles } from 'lucide-react';
 
 interface ApiKeyPromptProps {
-  onSave: (openaiKey: string, kieKey: string) => void;
+  onSave: (openaiKey: string, kieKey: string, laozhangKey: string) => void;
 }
 
 export const ApiKeyPrompt = memo(({ onSave }: ApiKeyPromptProps) => {
   const [openaiKey, setOpenaiKey] = useState('');
   const [kieKey, setKieKey] = useState('');
+  const [laozhangKey, setLaozhangKey] = useState('');
   const [showInfo, setShowInfo] = useState(false);
 
   const handleSave = () => {
-    if (!kieKey.trim()) {
-      alert('Kie.ai API key is required!');
+    if (!kieKey.trim() && !laozhangKey.trim()) {
+      alert('At least one API key (Kie.ai or Laozhang.ai) is required!');
       return;
     }
-    onSave(openaiKey.trim(), kieKey.trim());
+    onSave(openaiKey.trim(), kieKey.trim(), laozhangKey.trim());
   };
 
   return (
@@ -29,13 +30,13 @@ export const ApiKeyPrompt = memo(({ onSave }: ApiKeyPromptProps) => {
             </div>
             <div>
               <h2 className="text-lg font-semibold text-white">API Keys Required</h2>
-              <p className="text-xs text-white/50">Powered by Kie.ai - Multi-Model AI</p>
+              <p className="text-xs text-white/50">Powered by Kie.ai & Laozhang.ai</p>
             </div>
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
           {/* Info Banner */}
           <div className="flex items-start gap-3 p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-lg">
             <AlertCircle size={16} className="text-blue-400 mt-0.5 flex-shrink-0" />
@@ -44,12 +45,36 @@ export const ApiKeyPrompt = memo(({ onSave }: ApiKeyPromptProps) => {
             </div>
           </div>
 
-          {/* Kie.ai Key (Required) */}
+          {/* Laozhang.ai Key (For Sora 2 / Veo) */}
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-medium text-white">
+              <span>Laozhang.ai API Key</span>
+              <span className="px-2 py-0.5 bg-gradient-to-r from-orange-500/20 to-red-500/20 text-orange-300 text-[10px] font-semibold rounded">SORA 2 / VEO</span>
+            </label>
+            <input
+              type="password"
+              value={laozhangKey}
+              onChange={(e) => setLaozhangKey(e.target.value)}
+              placeholder="sk-xxxxxxxxxxxxxxxxxxxxx"
+              className="w-full px-4 py-2.5 bg-black/40 border border-white/10 rounded-lg text-white text-sm placeholder:text-white/30 outline-none focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 transition-all"
+            />
+            <p className="text-xs text-white/40">
+              Get your key at <a href="https://api.laozhang.ai" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 underline">api.laozhang.ai</a>
+            </p>
+            <div className="p-2 bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded text-xs text-white/60">
+              <div className="font-semibold text-orange-300 mb-1">✨ Laozhang.ai includes:</div>
+              <div className="space-y-0.5 text-[11px]">
+                <div>• <span className="text-red-300">Sora 2 Pro</span> - OpenAI's cinematic video</div>
+                <div>• <span className="text-orange-300">Veo 3.1</span> - Google's best video model</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Kie.ai Key */}
           <div className="space-y-2">
             <label className="flex items-center gap-2 text-sm font-medium text-white">
               <span>Kie.ai API Key</span>
-              <span className="px-2 py-0.5 bg-red-500/20 text-red-400 text-[10px] font-semibold rounded">REQUIRED</span>
-              <span className="px-2 py-0.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-purple-300 text-[10px] font-semibold rounded">NEW</span>
+              <span className="px-2 py-0.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-purple-300 text-[10px] font-semibold rounded">KLING / WAN</span>
             </label>
             <input
               type="password"
@@ -61,16 +86,6 @@ export const ApiKeyPrompt = memo(({ onSave }: ApiKeyPromptProps) => {
             <p className="text-xs text-white/40">
               Get your key at <a href="https://kie.ai/dashboard/keys" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 underline">kie.ai/dashboard/keys</a>
             </p>
-            <div className="mt-2 p-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded text-xs text-white/60">
-              <div className="font-semibold text-purple-300 mb-1">✨ Kie.ai includes:</div>
-              <div className="space-y-0.5 text-[11px]">
-                <div>• <span className="text-blue-300">Gemini 2.5 Flash</span> - Ultra-fast image generation</div>
-                <div>• <span className="text-green-300">FLUX 1-Dev</span> - High quality images</div>
-                <div>• <span className="text-yellow-300">Veo 3.1</span> - Cinematic video</div>
-                <div>• <span className="text-pink-300">Kling v2.6</span> - Realistic video</div>
-                <div>• <span className="text-orange-300">Hailuo 2.3</span> - Character-focused video</div>
-              </div>
-            </div>
           </div>
 
           {/* OpenAI Key (Optional) */}

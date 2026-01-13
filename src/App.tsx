@@ -1,4 +1,4 @@
-import { ReactFlow, Background, MiniMap, ReactFlowProvider, ConnectionLineType, Connection, ReactFlowInstance, OnConnectStartParams, useViewport } from '@xyflow/react';
+import { ReactFlow, Background, MiniMap, ReactFlowProvider, ConnectionLineType, Connection, ReactFlowInstance, OnConnectStartParams, useViewport, Node as FlowNode, Edge as FlowEdge } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useState, useEffect } from 'react';
 import { CanvasEmptyState } from './components/CanvasEmptyState';
@@ -14,6 +14,8 @@ import { CameraNode } from './components/nodes/CameraNode';
 import { ImageUploadNode } from './components/nodes/ImageUploadNode';
 import { ArraySplitterNode } from './components/nodes/ArraySplitterNode';
 import { CommentNode } from './components/nodes/CommentNode';
+import { EnhancementNode } from './components/nodes/EnhancementNode';
+import { CameraAngleNode } from './components/nodes/CameraAngleNode';
 import { ConnectSuggestMenu } from './components/ConnectSuggestMenu';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
@@ -28,6 +30,7 @@ import { useStore } from './store/useStore';
 import { hasApiKeys, updateApiKeys } from './lib/api';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useAutoSave } from './hooks/useAutoSave';
+import { isValidConnection, wouldCreateCycle, getConnectionErrorMessage } from './lib/nodeValidation';
 
 
 const nodeTypes = {
@@ -41,6 +44,8 @@ const nodeTypes = {
   imageUpload: ImageUploadNode,
   arraySplitter: ArraySplitterNode,
   comment: CommentNode,
+  enhancement: EnhancementNode,
+  cameraAngle: CameraAngleNode,
 };
 
 function App() {
@@ -60,10 +65,10 @@ function App() {
 
   return (
     <ReactFlowProvider>
-      {!keys.hasKie && (
+      {!keys.hasKie && !keys.hasLaozhang && (
         <ApiKeyPrompt
-          onSave={(openai, kie) => {
-            updateApiKeys(openai, kie);
+          onSave={(openai, kie, laozhang) => {
+            updateApiKeys(openai, kie, undefined, laozhang);
             window.location.reload();
           }}
         />
@@ -119,7 +124,7 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
   useAutoSave(true);
 
   return (
-    <div className={`h-screen w-screen bg-canvas-bg flex overflow-hidden ${zoomClass}`}>
+    <div className={`h-screen w-screen bg-[#0a0a0a] flex overflow-hidden ${zoomClass}`}>
       {/* Onboarding */}
       <OnboardingTour />
 
@@ -131,7 +136,7 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
       {showHistory && <HistoryPanel onClose={() => setShowHistory(true)} />}
 
 
-      {/* Sidebar */}
+      {/* Unified Sidebar (Left) - Tools, Add Nodes, Library, History */}
       <Sidebar
         onOpenLibrary={() => setShowLibrary(true)}
         onOpenHistory={() => setShowHistory(true)}
@@ -139,8 +144,6 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
 
       {/* Main area */}
       <div className="flex-1 relative">
-        {/* Pikaso-style vignette */}
-        <div className="pointer-events-none absolute inset-0 z-0 pika-vignette" />
         {/* TopBar */}
         <TopBar />
 
@@ -151,6 +154,32 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={(c: Connection) => {
+            // Validate connection
+            if (c.source && c.target) {
+              const sourceNode = nodes.find((n: FlowNode) => n.id === c.source);
+              const targetNode = nodes.find((n: FlowNode) => n.id === c.target);
+              
+              if (sourceNode && targetNode) {
+                // Check type compatibility
+                const validation = isValidConnection(sourceNode.type || '', targetNode.type || '');
+                
+                if (!validation.valid) {
+                  alert(`❌ Невозможно подключить: ${getConnectionErrorMessage(sourceNode.type || '', targetNode.type || '')}`);
+                  setSuggestMenu(null);
+                  setConnectStart(null);
+                  return;
+                }
+                
+                // Check for cycles
+                if (wouldCreateCycle(edges.map((e: FlowEdge) => ({ source: e.source, target: e.target })), c.source, c.target)) {
+                  alert('❌ Невозможно создать циклическую зависимость');
+                  setSuggestMenu(null);
+                  setConnectStart(null);
+                  return;
+                }
+              }
+            }
+            
             setSuggestMenu(null);
             setConnectStart(null);
             onConnect(c);
@@ -165,7 +194,7 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
             animated: false,
             style: {
               strokeWidth: 2,
-              stroke: '#64748b',
+              stroke: '#22dd88', // Freepik green
             },
             interactionWidth: 20,
             className: 'edge-hoverable',
@@ -200,7 +229,7 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
           panOnScroll={true}
           panOnScrollMode={'all' as any}
           fitView
-          className="bg-canvas-bg"
+          className="bg-[#1a1a1a]"
           deleteKeyCode="Delete"
           multiSelectionKeyCode="Shift"
           snapToGrid={true}
@@ -211,9 +240,9 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
           preventScrolling={true}
         >
           <Background
-            gap={24}
-            size={1.5}
-            color="rgba(255, 255, 255, 0.05)"
+            gap={20}
+            size={1}
+            color="rgba(255, 255, 255, 0.03)"
           />
           <BottomControls />
           <MiniMap

@@ -14,7 +14,12 @@ import {
 } from '@xyflow/react';
 import { generateText, generateImage, generateVideo, rotateCharacter, AI_MODELS } from '../lib/api';
 
-type NodeType = 'text' | 'image' | 'video' | 'masterPrompt' | 'modifier' | 'generator' | 'camera' | 'imageUpload' | 'arraySplitter' | 'comment';
+type NodeType = 'text' | 'image' | 'video' | 'masterPrompt' | 'modifier' | 'generator' | 'camera' | 'imageUpload' | 'arraySplitter' | 'comment' | 'enhancement' | 'cameraAngle';
+
+interface HistorySnapshot {
+  nodes: Node[];
+  edges: Edge[];
+}
 
 interface StoreState {
   nodes: Node[];
@@ -22,6 +27,10 @@ interface StoreState {
   projectName: string;
   credits: number;
   view: 'landing' | 'editor';
+  
+  // History
+  past: HistorySnapshot[];
+  future: HistorySnapshot[];
 
   // Actions
   setView: (view: 'landing' | 'editor') => void;
@@ -50,6 +59,13 @@ interface StoreState {
   loadWorkflow: (json: string) => void;
   clearWorkflow: () => void;
   createChain: (type: 'text-to-video' | 'change-background' | 'first-frame' | 'audio-to-video') => void;
+  
+  // HISTORY (Undo/Redo)
+  undo: () => void;
+  redo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
+  saveToHistory: () => void;
 }
 
 export const useStore = create<StoreState>()((set, get) => ({
@@ -166,24 +182,37 @@ export const useStore = create<StoreState>()((set, get) => ({
   projectName: 'UGC Косметика — Yves Rocher',
   credits: 285,
   view: 'landing',
+  
+  // History state
+  past: [],
+  future: [],
 
   // Actions
   setView: (view: 'landing' | 'editor') => set({ view }),
 
   // React Flow callbacks
   onNodesChange: (changes: NodeChange[]) => {
+    // Save to history before change
+    get().saveToHistory();
+    
     set({
       nodes: applyNodeChanges(changes, get().nodes),
     });
   },
 
   onEdgesChange: (changes: EdgeChange[]) => {
+    // Save to history before change
+    get().saveToHistory();
+    
     set({
       edges: applyEdgeChanges(changes, get().edges),
     });
   },
 
   onConnect: (connection: Connection) => {
+    // Save to history before change
+    get().saveToHistory();
+    
     set({
       edges: addEdge(
         { ...connection },
@@ -209,32 +238,24 @@ export const useStore = create<StoreState>()((set, get) => ({
         imageUpload: 'Загрузка изображения',
         arraySplitter: 'Array Splitter',
         comment: 'Комментарий',
+        enhancement: 'Улучшение изображения',
+        cameraAngle: 'Угол камеры',
       };
 
       const currentNodes = get().nodes;
       const nodeCount = currentNodes.filter(n => n.type === type).length + 1;
 
-      // Smart positioning: Find a good spot
-      // Default to center-ish if empty
-      let newX = 250;
-      let newY = 150;
+      // Smart positioning: Place at a reasonable center position
+      // Use a fixed base position with slight variation to avoid exact stacking
+      const baseX = 400;
+      const baseY = 300;
 
-      if (currentNodes.length > 0) {
-        // Find the "lowest" node to place below, or cascading
-        // We'll calculate the bounding box of the last few nodes or just the last one
-        const lastNode = currentNodes[currentNodes.length - 1];
-        if (lastNode && lastNode.position) {
-          // Place slightly offset from the last node to avoid exact stacking
-          // But also try to keep it organized.
-          // Let's try a simple "stack downwards with slight right indent" approach
-          // or "waterfall"
-          newX = lastNode.position.x + 30;
-          newY = lastNode.position.y + 50;
+      // Add a small random offset to prevent perfect overlap
+      const offsetX = (currentNodes.length % 5) * 40;
+      const offsetY = (currentNodes.length % 5) * 40;
 
-          // If we drift too far right, reset X
-          if (newX > 1000) newX = 100;
-        }
-      }
+      const newX = baseX + offsetX;
+      const newY = baseY + offsetY;
 
       const newNode: Node = {
         id: `${type}_${Date.now()}`,
@@ -268,6 +289,8 @@ export const useStore = create<StoreState>()((set, get) => ({
           ...(type === 'modifier' && { modifierType: 'angle', selectedOption: 'Крупный план' }),
           ...(type === 'generator' && { generationType: 'image', selectedModel: 'flux-dev' }),
           ...(type === 'camera' && { angle: 0, view: 'front' }),
+          ...(type === 'enhancement' && { params: { sharpness: 50, contrast: 50 } }),
+          ...(type === 'cameraAngle' && { params: { rotate: 0, vertical: 0, zoom: 1 } }),
         },
       };
 
@@ -297,6 +320,8 @@ export const useStore = create<StoreState>()((set, get) => ({
       imageUpload: 'Загрузка изображения',
       arraySplitter: 'Array Splitter',
       comment: 'Комментарий',
+      enhancement: 'Улучшение изображения',
+      cameraAngle: 'Угол камеры',
     };
 
     const currentNodes = get().nodes;
@@ -334,6 +359,8 @@ export const useStore = create<StoreState>()((set, get) => ({
         ...(type === 'modifier' && { modifierType: 'angle', selectedOption: 'Крупный план' }),
         ...(type === 'generator' && { generationType: 'image', selectedModel: 'flux-dev' }),
         ...(type === 'camera' && { angle: 0, view: 'front' }),
+        ...(type === 'enhancement' && { params: { sharpness: 50, contrast: 50 } }),
+        ...(type === 'cameraAngle' && { params: { rotate: 0, vertical: 0, zoom: 1 } }),
       },
     };
 
@@ -861,6 +888,96 @@ export const useStore = create<StoreState>()((set, get) => ({
       const videoId = addNodeAt('video', { x: startX + 400, y: startY });
       onConnect({ source: audioId, target: videoId, sourceHandle: null, targetHandle: null });
     }
+  },
+
+  // ==================== HISTORY (UNDO/REDO) ====================
+
+  saveToHistory: () => {
+    const { nodes, edges, past } = get();
+    
+    // Check if last snapshot is the same (avoid duplicates)
+    const lastSnapshot = past[past.length - 1];
+    if (lastSnapshot && 
+        JSON.stringify(lastSnapshot.nodes) === JSON.stringify(nodes) &&
+        JSON.stringify(lastSnapshot.edges) === JSON.stringify(edges)) {
+      return; // No changes, skip
+    }
+
+    const snapshot: HistorySnapshot = {
+      nodes: JSON.parse(JSON.stringify(nodes)),
+      edges: JSON.parse(JSON.stringify(edges)),
+    };
+
+    const newPast = [...past, snapshot].slice(-50); // Keep max 50 snapshots
+
+    set({
+      past: newPast,
+      future: [], // Clear future on new action
+    });
+
+    console.log('💾 History saved:', newPast.length, 'snapshots');
+  },
+
+  undo: () => {
+    const { past, future, nodes, edges } = get();
+    
+    if (past.length === 0) {
+      console.log('⚠️ Nothing to undo');
+      return;
+    }
+
+    const previous = past[past.length - 1];
+    const newPast = past.slice(0, past.length - 1);
+    
+    // Save current state to future
+    const currentSnapshot: HistorySnapshot = {
+      nodes: JSON.parse(JSON.stringify(nodes)),
+      edges: JSON.parse(JSON.stringify(edges)),
+    };
+
+    set({
+      nodes: previous.nodes,
+      edges: previous.edges,
+      past: newPast,
+      future: [currentSnapshot, ...future].slice(0, 50),
+    });
+
+    console.log('⏪ Undo:', newPast.length, 'past,', future.length + 1, 'future');
+  },
+
+  redo: () => {
+    const { past, future, nodes, edges } = get();
+    
+    if (future.length === 0) {
+      console.log('⚠️ Nothing to redo');
+      return;
+    }
+
+    const next = future[0];
+    const newFuture = future.slice(1);
+    
+    // Save current state to past
+    const currentSnapshot: HistorySnapshot = {
+      nodes: JSON.parse(JSON.stringify(nodes)),
+      edges: JSON.parse(JSON.stringify(edges)),
+    };
+
+    set({
+      nodes: next.nodes,
+      edges: next.edges,
+      past: [...past, currentSnapshot].slice(-50),
+      future: newFuture,
+    });
+
+    console.log('⏩ Redo:', past.length + 1, 'past,', newFuture.length, 'future');
+  },
+
+  canUndo: () => {
+    return get().past.length > 0;
+  },
+
+  canRedo: () => {
+    return get().future.length > 0;
   },
 }));
 

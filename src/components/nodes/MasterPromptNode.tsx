@@ -1,139 +1,51 @@
-import { memo, useState, useEffect } from 'react';
+import { memo, useState } from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
-import { Brain, Sparkles, Loader2 } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 
 export const MasterPromptNode = memo(({ id, data, selected }: NodeProps) => {
   const updateNode = useStore(s => s.updateNode);
-  const improvePrompt = useStore(s => s.improvePrompt);
   const nodeData = data as Record<string, unknown>;
-  const [content, setContent] = useState<string>((nodeData?.content as string) || '');
-  const isImproving = nodeData?.state === 'loading';
+  const [prompt, setPrompt] = useState<string>((nodeData?.prompt as string) || '');
 
-  // Sync content from store when AI updates it
-  useEffect(() => {
-    if (nodeData?.content && nodeData.content !== content) {
-      setContent(nodeData.content as string);
-    }
-  }, [nodeData?.content]);
-
-  const handleChange = (value: string) => {
-    setContent(value);
-    updateNode(id, { content: value });
-  };
-
-  const handleImprove = () => {
-    if (!content) return;
-    improvePrompt(id);
+  const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newPrompt = e.target.value;
+    setPrompt(newPrompt);
+    updateNode(id, { prompt: newPrompt });
   };
 
   return (
-    <div className={`
-      node-card
-      node-master
-      ${selected ? 'selected' : ''}
-      ${isImproving ? 'opacity-80' : ''}
-    `}>
-      <Handle
-        type="target"
-        position={Position.Left}
-        className="node-handle !-left-1.5"
-        title="Connect input"
-      />
+    <div className="w-[280px] relative">
+      <div
+        data-state={(nodeData?.state as string) || 'idle'}
+        className={`node-card ${selected ? 'selected' : ''}`}
+      >
+        <Handle type="source" position={Position.Right} id="prompt-output" />
 
-      {/* Header */}
-      <div className="px-3 py-2 border-b border-white/5 flex items-center gap-2">
-        <Brain size={16} className="text-purple-400" />
-        <input
-          type="text"
-          defaultValue={(nodeData?.title as string) || 'Master Prompt'}
-          className="flex-1 bg-transparent text-sm font-semibold text-white outline-none node-title"
-          onChange={(e) => updateNode(id, { title: e.target.value })}
-        />
+        {/* Header */}
+        <div className="flex items-center gap-2 px-3 py-2 border-b border-white/[0.04]">
+          <FileText size={12} className="opacity-50" />
+          <span className="text-[11px] font-medium text-white/65 flex-1">
+            {(nodeData?.title as string) || 'Master Prompt'}
+          </span>
+        </div>
 
-        {/* Status badge */}
-        {isImproving && (
-          <div className="ml-auto flex items-center gap-1 px-2 py-1 bg-blue-500/20 rounded text-[10px] text-blue-300">
-            <Loader2 size={10} className="animate-spin" />
-            Generating...
-          </div>
-        )}
-
-        {nodeData?.state === 'success' && (
-          <div className="ml-auto px-2 py-1 bg-green-500/20 rounded text-[10px] text-green-300">
-            ✓ Done
-          </div>
-        )}
-
-        {nodeData?.state === 'error' && (
-          <div className="ml-auto px-2 py-1 bg-red-500/20 rounded text-[10px] text-red-300" title={nodeData.error as string}>
-            ✗ Error
-          </div>
-        )}
-
-        {!nodeData?.state && (
-          <div className="px-2 py-0.5 bg-purple-500/20 rounded text-[10px] text-purple-300 font-semibold">
-            MASTER
-          </div>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="p-3 space-y-2">
-        {nodeData?.state === 'error' && (
-          <div className="text-xs text-red-400 bg-red-400/10 p-2 rounded border border-red-400/20">
-            {String(nodeData.error || 'Unknown error')}
-          </div>
-        )}
-        <div className="relative">
+        {/* Content */}
+        <div className="p-3">
           <textarea
-            value={content}
-            onChange={(e) => handleChange(e.target.value)}
-            placeholder="Main subject and scene description..."
-            className="w-full h-28 bg-black/20 border border-purple-500/20 rounded-lg px-3 py-2 text-sm text-white outline-none resize-none placeholder:text-white/30 focus:border-purple-500/50 transition-colors leading-relaxed custom-scrollbar"
+            value={prompt}
+            onChange={handlePromptChange}
+            placeholder="Введите базовый промпт..."
+            className="w-full min-h-[120px] bg-black/30 border border-white/[0.03] rounded-lg px-3 py-2 text-[12px] text-white/80 placeholder:text-white/20 outline-none focus:border-blue-500/30 resize-none"
+            onClick={(e) => e.stopPropagation()}
           />
-          {!content && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none gap-2">
-              <Brain size={24} className="text-purple-400/20" />
-              <span className="text-xs text-white/20">Describe your main scene...</span>
-            </div>
-          )}
         </div>
 
-        <div className="flex items-center justify-between text-xs node-detail">
-          <div className="flex items-center gap-2">
-            <span className="text-white/30">{content.length} chars</span>
-            {content.length > 0 && (
-              <span className="text-purple-400/60">• Master</span>
-            )}
-          </div>
-
-          <button
-            onClick={handleImprove}
-            disabled={isImproving || !content}
-            className="px-3 py-1.5 bg-purple-500/10 hover:bg-purple-500/20 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-purple-400 flex items-center gap-1.5 transition-colors border border-purple-500/20 hover:border-purple-500/40"
-          >
-            {isImproving ? (
-              <>
-                <Loader2 className="animate-spin" size={12} />
-                Improving...
-              </>
-            ) : (
-              <>
-                <Sparkles size={12} />
-                Enhance
-              </>
-            )}
-          </button>
+        {/* Выход */}
+        <div className="px-3 pb-3 flex items-center justify-end gap-2">
+          <span className="text-[10px] text-white/40">Промпт</span>
         </div>
       </div>
-
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="node-handle !-right-1.5"
-        title="Connect to modifiers or generator"
-      />
     </div>
   );
 });

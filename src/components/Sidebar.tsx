@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Plus, Library, Clock, MousePointer2, LucideIcon } from 'lucide-react';
+import { Plus, Library, Clock, LucideIcon, MousePointer2, Hand, Scissors, MessageSquare, Undo2, Redo2, Settings } from 'lucide-react';
 import { AddNodesMenu } from './AddNodesMenu';
+import { useStore } from '../store/useStore';
 
 interface SidebarProps {
   onOpenLibrary?: () => void;
@@ -9,14 +10,33 @@ interface SidebarProps {
 
 export function Sidebar({ onOpenLibrary, onOpenHistory }: SidebarProps) {
   const [showAddMenu, setShowAddMenu] = useState(false);
+  const undo = useStore((state) => state.undo);
+  const redo = useStore((state) => state.redo);
+  const canUndo = useStore((state) => state.canUndo);
+  const canRedo = useStore((state) => state.canRedo);
+
+  const handleUndo = () => {
+    if (canUndo()) {
+      undo();
+    }
+  };
+
+  const handleRedo = () => {
+    if (canRedo()) {
+      redo();
+    }
+  };
 
   return (
     <>
-      {/* Floating left toolbar (Glassmorphism style) */}
+      {/* Unified left toolbar - Tools + Add Nodes + Library */}
       <div className="fixed left-4 top-1/2 -translate-y-1/2 z-30">
         <div className="w-16 glass-panel rounded-2xl shadow-2xl shadow-black/70 flex flex-col items-center py-3 gap-2">
-          {/* Selection tool */}
-          <SidebarButton icon={MousePointer2} label="Выбор" active />
+          {/* Tools Section */}
+          <SidebarButton icon={MousePointer2} label="Selection" active />
+          <SidebarButton icon={Hand} label="Pan" />
+          <SidebarButton icon={Scissors} label="Cut" />
+          <SidebarButton icon={MessageSquare} label="Comment" />
 
           <div className="w-12 h-px bg-white/5 my-1" />
 
@@ -41,7 +61,43 @@ export function Sidebar({ onOpenLibrary, onOpenHistory }: SidebarProps) {
 
           <div className="w-12 h-px bg-white/5 my-1" />
 
+          {/* History */}
+          <button
+            onClick={handleUndo}
+            disabled={!canUndo()}
+            className={`
+              w-11 h-11 rounded-xl flex items-center justify-center
+              transition-all duration-200
+              ${!canUndo()
+                ? 'text-white/10 cursor-not-allowed'
+                : 'hover:bg-white/5 text-white/40 hover:text-white/80'
+              }
+            `}
+            title="Undo (Ctrl+Z)"
+          >
+            <Undo2 size={18} />
+          </button>
+
+          <button
+            onClick={handleRedo}
+            disabled={!canRedo()}
+            className={`
+              w-11 h-11 rounded-xl flex items-center justify-center
+              transition-all duration-200
+              ${!canRedo()
+                ? 'text-white/10 cursor-not-allowed'
+                : 'hover:bg-white/5 text-white/40 hover:text-white/80'
+              }
+            `}
+            title="Redo (Ctrl+Shift+Z)"
+          >
+            <Redo2 size={18} />
+          </button>
+
+          <div className="w-12 h-px bg-white/5 my-1" />
+
           <SidebarButton icon={Clock} label="История" onClick={onOpenHistory} />
+          <SidebarButton icon={Settings} label="Settings" />
         </div>
       </div>
 

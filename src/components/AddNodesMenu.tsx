@@ -1,4 +1,4 @@
-import { X, Search, Type, Image, Video, Brain, Wand2, Palette, RotateCw, Upload, SplitSquareHorizontal } from 'lucide-react';
+import { X, Search, Type, Image, Video, Brain, Wand2, Palette, RotateCw, Upload, SplitSquareHorizontal, Sparkles, Move3d } from 'lucide-react';
 import { useState } from 'react';
 import { useStore } from '../store/useStore';
 
@@ -67,12 +67,28 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
           type: 'generator' as const
         },
         {
+          icon: Sparkles,
+          label: 'Улучшение изображения',
+          subtitle: 'Резкость и контраст',
+          badge: 'NEW',
+          badgeColor: 'bg-yellow-500/20 text-yellow-400',
+          type: 'enhancement' as const
+        },
+        {
           icon: RotateCw,
           label: 'Камера',
           subtitle: 'Изменение ракурса',
           badge: 'BETA',
           badgeColor: 'bg-blue-500/20 text-blue-400',
           type: 'camera' as const
+        },
+        {
+          icon: Move3d,
+          label: 'Угол камеры',
+          subtitle: 'Поворот, наклон, зум',
+          badge: 'NEW',
+          badgeColor: 'bg-purple-500/20 text-purple-400',
+          type: 'cameraAngle' as const
         },
         {
           icon: Palette,
@@ -98,7 +114,7 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
     },
   ];
 
-  const handleAddNode = (type: 'text' | 'image' | 'video' | 'masterPrompt' | 'modifier' | 'generator' | 'camera' | 'imageUpload' | 'arraySplitter' | 'comment') => {
+  const handleAddNode = (type: 'text' | 'image' | 'video' | 'masterPrompt' | 'modifier' | 'generator' | 'camera' | 'imageUpload' | 'arraySplitter' | 'comment' | 'enhancement' | 'cameraAngle') => {
     addNode(type);
     onClose();
   };

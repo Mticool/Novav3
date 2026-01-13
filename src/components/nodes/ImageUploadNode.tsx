@@ -1,182 +1,76 @@
-import { memo, useState, useCallback } from 'react';
+import { memo, useRef } from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
-import { Upload, Image as ImageIcon, X, Link as LinkIcon } from 'lucide-react';
+import { Upload, Image as ImageIcon } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 
 export const ImageUploadNode = memo(({ id, data, selected }: NodeProps) => {
-    const updateNode = useStore(s => s.updateNode);
-    const [isDragging, setIsDragging] = useState(false);
-    const [showUrlInput, setShowUrlInput] = useState(false);
-    const [urlInput, setUrlInput] = useState('');
+  const updateNode = useStore(s => s.updateNode);
+  const nodeData = data as Record<string, unknown>;
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleFile = useCallback((file: File) => {
-        if (!file.type.startsWith('image/')) {
-            alert('Пожалуйста, загрузите изображение');
-            return;
-        }
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const imageUrl = e.target?.result as string;
-            updateNode(id, { imageUrl, fileName: file.name });
-        };
-        reader.readAsDataURL(file);
-    }, [id, updateNode]);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const imageUrl = event.target?.result as string;
+      updateNode(id, { imageUrl, state: 'success' });
+    };
+    reader.readAsDataURL(file);
+  };
 
-    const handleDrop = useCallback((e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
 
-        const file = e.dataTransfer.files[0];
-        if (file) handleFile(file);
-    }, [handleFile]);
+  return (
+    <div className="w-[280px] relative">
+      <div
+        data-state={(nodeData?.state as string) || 'idle'}
+        className={`node-card ${selected ? 'selected' : ''}`}
+      >
+        <Handle type="source" position={Position.Right} id="image-output" />
 
-    const handleDragOver = useCallback((e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(true);
-    }, []);
-
-    const handleDragLeave = useCallback(() => {
-        setIsDragging(false);
-    }, []);
-
-    const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) handleFile(file);
-    }, [handleFile]);
-
-    const handleUrlSubmit = useCallback(() => {
-        if (urlInput.trim()) {
-            updateNode(id, { imageUrl: urlInput.trim(), fileName: 'URL Image' });
-            setShowUrlInput(false);
-            setUrlInput('');
-        }
-    }, [id, urlInput, updateNode]);
-
-    const handleClear = useCallback(() => {
-        updateNode(id, { imageUrl: null, fileName: null });
-    }, [id, updateNode]);
-
-    const imageUrl = data?.imageUrl as string | undefined;
-    const fileName = data?.fileName as string | undefined;
-    const nodeData = data as Record<string, unknown>;
-
-    return (
-        <div className="w-[280px]">
-            {/* Title */}
-            <div className="mb-2 flex items-center gap-2 text-xs text-white/60">
-                <Upload size={14} className="text-white/50" />
-                <span className="text-white/80 font-medium">{(nodeData?.title as string) || 'Загрузка изображения'}</span>
-            </div>
-
-            <div
-                className={`
-          node-card
-          relative
-          ${isDragging ? 'bg-accent-neon/5' : ''}
-          ${selected ? 'selected' : ''}
-        `}
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-            >
-                {/* Output handle */}
-                <Handle
-                    type="source"
-                    position={Position.Right}
-                    className="node-handle !-right-1.5"
-                />
-
-                {imageUrl ? (
-                    /* Image Preview */
-                    <div className="relative group">
-                        <img
-                            src={imageUrl}
-                            alt={fileName || 'Uploaded'}
-                            className="w-full h-[180px] object-cover"
-                        />
-
-                        {/* Overlay with actions */}
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                            <button
-                                onClick={handleClear}
-                                className="p-2 bg-red-500/20 hover:bg-red-500/30 rounded-xl text-red-400 transition-colors"
-                                title="Удалить"
-                            >
-                                <X size={18} />
-                            </button>
-                        </div>
-
-                        {/* File name */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-3 py-2">
-                            <span className="text-xs text-white/70 truncate block">{fileName}</span>
-                        </div>
-                    </div>
-                ) : (
-                    /* Upload Zone */
-                    <div className="h-[180px] flex flex-col items-center justify-center p-4">
-                        {showUrlInput ? (
-                            <div className="w-full space-y-2">
-                                <input
-                                    type="url"
-                                    value={urlInput}
-                                    onChange={(e) => setUrlInput(e.target.value)}
-                                    placeholder="https://example.com/image.jpg"
-                                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-sm text-white outline-none placeholder:text-white/30 focus:border-accent-neon/30"
-                                    autoFocus
-                                />
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={handleUrlSubmit}
-                                        className="flex-1 py-2 btn-neon rounded-xl text-xs font-medium"
-                                    >
-                                        Добавить
-                                    </button>
-                                    <button
-                                        onClick={() => setShowUrlInput(false)}
-                                        className="px-3 py-2 bg-white/5 rounded-xl text-xs text-white/60"
-                                    >
-                                        Отмена
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <>
-                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-3 transition-colors ${isDragging ? 'bg-accent-neon/20' : 'bg-white/5'}`}>
-                                    <ImageIcon size={24} className={isDragging ? 'text-accent-neon' : 'text-white/30'} />
-                                </div>
-
-                                <p className="text-sm text-white/50 mb-1">
-                                    {isDragging ? 'Отпустите для загрузки' : 'Перетащите изображение'}
-                                </p>
-                                <p className="text-xs text-white/30 mb-3">или</p>
-
-                                <div className="flex gap-2">
-                                    <label className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/5 rounded-full text-xs text-white/70 cursor-pointer transition-colors">
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={handleFileInput}
-                                            className="hidden"
-                                        />
-                                        Выбрать файл
-                                    </label>
-
-                                    <button
-                                        onClick={() => setShowUrlInput(true)}
-                                        className="px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/5 rounded-full text-white/50 transition-colors"
-                                        title="Вставить URL"
-                                    >
-                                        <LinkIcon size={14} />
-                                    </button>
-                                </div>
-                            </>
-                        )}
-                    </div>
-                )}
-            </div>
+        {/* Header */}
+        <div className="flex items-center gap-2 px-3 py-2 border-b border-white/[0.04]">
+          <ImageIcon size={12} className="opacity-50" />
+          <span className="text-[11px] font-medium text-white/65 flex-1">
+            {(nodeData?.title as string) || 'Image Upload'}
+          </span>
         </div>
-    );
+
+        {/* Upload Area */}
+        <div className="p-3">
+          <div
+            onClick={handleUploadClick}
+            className="w-full h-[140px] bg-black/30 border border-dashed border-white/[0.1] rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:border-white/20 transition-colors"
+          >
+            {nodeData?.imageUrl && typeof nodeData.imageUrl === 'string' ? (
+              <img src={nodeData.imageUrl} alt="Uploaded" className="w-full h-full object-cover" />
+            ) : (
+              <div className="flex flex-col items-center gap-2">
+                <Upload size={20} className="text-white/20" />
+                <span className="text-[10px] text-white/30">Click to upload</span>
+              </div>
+            )}
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+        </div>
+
+        {/* Выход */}
+        <div className="px-3 pb-3 flex items-center justify-end gap-2">
+          <span className="text-[10px] text-white/40">Изображение</span>
+        </div>
+      </div>
+    </div>
+  );
 });
 
 ImageUploadNode.displayName = 'ImageUploadNode';
