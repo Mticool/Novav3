@@ -7,27 +7,28 @@
    =========================================== */
 
 :root {
-  /* ЦВЕТОВАЯ СХЕМА (PIKASO) */
-  --canvas-bg: #141414;
-  --node-bg: #1f1f1f;
-  --node-border: rgba(255, 255, 255, 0.1);
-  --node-border-hover: rgba(255, 255, 255, 0.15);
-  --node-border-selected: #00a8ff;
+  /* ЦВЕТОВАЯ СХЕМА (PIKASO) - ОБНОВЛЕНО */
+  --canvas-bg: #0a0a0a;
+  --node-bg: #1a1a1a;
+  --node-border: rgba(255, 255, 255, 0.08);
+  --node-border-hover: rgba(255, 255, 255, 0.12);
+  --node-border-selected: #4a9eff;
   --text-primary: #ffffff;
   --text-secondary: #cccccc;
   --text-tertiary: #888888;
-  --handle-blue: #0088ff;
-  --handle-green: #22dd88;
-  --input-bg: rgba(255, 255, 255, 0.05);
-  --input-border: rgba(255, 255, 255, 0.1);
-  
+  --handle-neutral: #4a4a4a;
+  --edge-neutral: #555555;
+  --accent-blue: #4a9eff;
+  --input-bg: rgba(255, 255, 255, 0.04);
+  --input-border: rgba(255, 255, 255, 0.08);
+
   /* РАЗМЕРЫ (PIKASO) */
   --handle-size: 8px;
   --node-radius: 16px;
   --node-padding: 20px;
-  --node-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  --node-shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.5);
-  --node-shadow-selected: 0 0 0 3px rgba(0, 168, 255, 0.2), 0 8px 32px rgba(0, 168, 255, 0.3);
+  --node-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --node-shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.6);
+  --node-shadow-selected: 0 0 0 3px rgba(74, 158, 255, 0.15), 0 8px 32px rgba(74, 158, 255, 0.25);
 }
 
 /* ОСНОВНОЙ ШРИФТ */
@@ -43,24 +44,24 @@ body {
    =========================================== */
 
 .react-flow__pane {
-  background: #141414 !important;
+  background: #0a0a0a !important;
 }
 
 .react-flow__background {
-  background-color: #141414 !important;
+  background-color: #0a0a0a !important;
 }
 
 /* Едва заметная сетка */
 .react-flow__background pattern {
-  stroke: rgba(255, 255, 255, 0.03) !important;
+  stroke: rgba(255, 255, 255, 0.02) !important;
 }
 
 .react-flow__background line {
-  stroke: rgba(255, 255, 255, 0.03) !important;
+  stroke: rgba(255, 255, 255, 0.02) !important;
 }
 
 .react-flow__background circle {
-  fill: rgba(255, 255, 255, 0.03) !important;
+  fill: rgba(255, 255, 255, 0.02) !important;
 }
 
 /* ===========================================
@@ -68,25 +69,24 @@ body {
    =========================================== */
 
 .node-card {
-  background: #1f1f1f !important;
-  border: 2px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 16px !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  background: rgb(15, 15, 15) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
   padding: 0;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .node-card:hover {
-  border-color: rgba(255, 255, 255, 0.15) !important;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
 }
 
 .node-card.selected {
-  border-color: #00a8ff !important;
-  box-shadow: 
-    0 0 0 3px rgba(0, 168, 255, 0.2),
-    0 8px 32px rgba(0, 168, 255, 0.3) !important;
+  border: 2px solid #3b82f6 !important;
+  box-shadow:
+    0 0 0 3px rgba(59, 130, 246, 0.2),
+    0 4px 16px rgba(59, 130, 246, 0.3) !important;
 }
 
 /* ===========================================
@@ -94,21 +94,23 @@ body {
    =========================================== */
 
 .pikaso-node {
-  background: #1f1f1f;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: rgb(15, 15, 15);
+  border: none;
+  border-radius: 12px;
   min-width: 420px;
   padding: 20px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
 }
 
 .pikaso-node:hover {
-  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .pikaso-node.selected {
-  border: 2px solid #00a8ff;
-  box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.2);
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 /* Состояния нод */
@@ -130,21 +132,21 @@ body {
 /* Заголовок ноды */
 /* Точный блок из требований */
 .node {
-  background: #1f1f1f;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: rgb(15, 15, 15);
+  border: none;
+  border-radius: 12px;
   min-width: 420px;
   max-width: 450px;
   padding: 24px;
   font-family: 'Inter', -apple-system, sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
-  /* НЕ добавляем transform - это замедлит перетаскивание! */
 }
 
 /* Выделенная нода */
 .node.selected {
-  border: 2px solid #00a8ff; /* Голубой! */
-  box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.2);
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 /* Заголовок */
@@ -303,28 +305,25 @@ body {
   width: var(--handle-size) !important;
   height: var(--handle-size) !important;
   border-radius: 50%;
-  border: 2px solid #222 !important;
+  border: none !important;
+  background: var(--handle-neutral) !important;
+  opacity: 0.5;
   transition: all 0.2s ease;
 }
 
-/* Входы - СИНИЕ */
+/* Все handles одинаковые - минималистичные */
 .react-flow__handle-left,
-.react-flow__handle.target {
-  background: var(--handle-blue) !important;
-}
-
-/* Выходы - ЗЕЛЁНЫЕ */
+.react-flow__handle.target,
 .react-flow__handle-right,
 .react-flow__handle.source {
-  background: var(--handle-green) !important;
+  background: var(--handle-neutral) !important;
 }
 
-/* Hover */
+/* Hover - становятся заметнее */
 .react-flow__handle:hover {
-  width: 12px !important;
-  height: 12px !important;
-  box-shadow: 0 0 12px currentColor;
-  filter: brightness(1.2);
+  opacity: 1;
+  transform: scale(1.3);
+  background: #666666 !important;
 }
 
 /* ===========================================
@@ -332,19 +331,19 @@ body {
    =========================================== */
 
 .react-flow__edge-path {
-  stroke: var(--handle-green) !important;
-  stroke-width: 2px !important;
+  stroke: var(--edge-neutral) !important;
+  stroke-width: 1.5px !important;
   transition: all 0.2s ease;
 }
 
 .react-flow__edge:hover .react-flow__edge-path {
-  stroke-width: 4px !important;
-  filter: brightness(1.2);
+  stroke: #777777 !important;
+  stroke-width: 2px !important;
 }
 
 .react-flow__edge.selected .react-flow__edge-path {
-  stroke: var(--handle-blue) !important;
-  stroke-width: 3px !important;
+  stroke: var(--accent-blue) !important;
+  stroke-width: 2px !important;
 }
 
 /* ===========================================
@@ -557,6 +556,7 @@ input[type="range"].slider::-moz-range-thumb:hover {
     opacity: 0;
     transform: translateX(-20px) translateY(-50%);
   }
+
   to {
     opacity: 1;
     transform: translateX(0) translateY(-50%);

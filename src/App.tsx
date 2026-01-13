@@ -160,18 +160,18 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
             if (c.source && c.target) {
               const sourceNode = nodes.find((n: FlowNode) => n.id === c.source);
               const targetNode = nodes.find((n: FlowNode) => n.id === c.target);
-              
+
               if (sourceNode && targetNode) {
                 // Check type compatibility
                 const validation = isValidConnection(sourceNode.type || '', targetNode.type || '');
-                
+
                 if (!validation.valid) {
                   alert(`❌ Невозможно подключить: ${getConnectionErrorMessage(sourceNode.type || '', targetNode.type || '')}`);
                   setSuggestMenu(null);
                   setConnectStart(null);
                   return;
                 }
-                
+
                 // Check for cycles
                 if (wouldCreateCycle(edges.map((e: FlowEdge) => ({ source: e.source, target: e.target })), c.source, c.target)) {
                   alert('❌ Невозможно создать циклическую зависимость');
@@ -179,51 +179,24 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
                   setConnectStart(null);
                   return;
                 }
-                
-                // Determine edge color based on connection type
-                let edgeColor = '#22dd88'; // Default green
-                let animated = false;
-                
-                // Text → Image: Green
-                if ((sourceNode.type === 'text' || sourceNode.type === 'masterPrompt') && 
-                    targetNode.type === 'image') {
-                  edgeColor = '#22dd88';
-                  animated = true;
-                }
-                // Image → Video: Blue
-                else if (sourceNode.type === 'image' && targetNode.type === 'video') {
-                  edgeColor = '#3b82f6';
-                  animated = true;
-                }
-                // Text → Video: Purple
-                else if ((sourceNode.type === 'text' || sourceNode.type === 'masterPrompt') && 
-                         targetNode.type === 'video') {
-                  edgeColor = '#a855f7';
-                  animated = true;
-                }
-                // Image → Camera: Cyan
-                else if (sourceNode.type === 'image' && targetNode.type === 'camera') {
-                  edgeColor = '#06b6d4';
-                  animated = true;
-                }
-                
-                // Create connection with styled edge
+
+                // Simple neutral edge style (Pikaso)
                 const styledConnection = {
                   ...c,
-                  animated,
+                  animated: false,
                   style: {
-                    stroke: edgeColor,
-                    strokeWidth: 2,
+                    stroke: '#555555',
+                    strokeWidth: 1.5,
                   },
                 };
-                
+
                 setSuggestMenu(null);
                 setConnectStart(null);
                 onConnect(styledConnection);
                 return;
               }
             }
-            
+
             setSuggestMenu(null);
             setConnectStart(null);
             onConnect(c);
@@ -237,8 +210,8 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
           defaultEdgeOptions={{
             animated: false,
             style: {
-              strokeWidth: 2,
-              stroke: '#22dd88', // Freepik green
+              strokeWidth: 1.5,
+              stroke: '#555555', // Neutral gray (Pikaso)
             },
             interactionWidth: 20,
             className: 'edge-hoverable',
@@ -283,12 +256,12 @@ function FlowEditor({ nodes, edges, onNodesChange, onEdgesChange, onConnect, add
           onPaneClick={handlePaneClick}
           preventScrolling={true}
         >
-        <Background
-          gap={20}
-          size={1}
-          color="rgba(255, 255, 255, 0.03)"
-          style={{ backgroundColor: '#141414' }}
-        />
+          <Background
+            gap={20}
+            size={1}
+            color="rgba(255, 255, 255, 0.03)"
+            style={{ backgroundColor: '#141414' }}
+          />
           <BottomControls />
           <MiniMap
             nodeColor={(node) => {

@@ -1,4 +1,4 @@
-import { X, Search, Type, Image, Video, Brain, Wand2, Palette, RotateCw, Upload, SplitSquareHorizontal, Sparkles, Move3d, MessageSquare } from 'lucide-react';
+import { X, Search, Type, Image, Video, Brain, Wand2, Palette, RotateCw, Upload, SplitSquareHorizontal, Sparkles, Move3d } from 'lucide-react';
 import { useState } from 'react';
 import { useStore, NodeType } from '../store/useStore';
 
@@ -16,14 +16,12 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
       items: [
         {
           icon: Upload,
-          emoji: '⬆️',
           label: 'Загрузить',
           subtitle: 'Изображение или видео',
           type: 'imageUpload' as const,
         },
         {
           icon: Image,
-          emoji: '🎬',
           label: 'Медиа',
           subtitle: 'Библиотека медиафайлов',
           type: null as any,
@@ -35,50 +33,44 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
       items: [
         {
           icon: Type,
-          emoji: '🟢',
           label: 'Текст',
           subtitle: 'Текстовый узел для промптов',
           type: 'text' as const
         },
         {
           icon: Image,
-          emoji: '🔵',
           label: 'Генератор изображений',
           subtitle: 'AI генерация изображений',
           type: 'image' as const
         },
         {
           icon: Video,
-          emoji: '🟣',
           label: 'Генератор видео',
           subtitle: 'AI генерация видео',
           type: 'video' as const
         },
         {
           icon: Sparkles,
-          emoji: '✨',
           label: 'Помощник',
           subtitle: 'AI-помощник — ваш творческий партнер',
-          badge: 'AI',
-          badgeColor: 'bg-purple-500/20 text-purple-400',
+          badge: 'AI' as const,
+          badgeColor: 'bg-purple-500/20 text-purple-400' as const,
           type: 'assistant' as const
         },
         {
           icon: Wand2,
-          emoji: '🖼️',
           label: 'Улучшение качества изображений',
           subtitle: 'Upscale и улучшение деталей',
-          badge: 'PRO',
-          badgeColor: 'bg-orange-500/20 text-orange-400',
+          badge: 'PRO' as const,
+          badgeColor: 'bg-orange-500/20 text-orange-400' as const,
           type: 'enhancement' as const
         },
         {
           icon: Move3d,
-          emoji: '📹',
           label: 'Угол обзора камеры',
           subtitle: 'Поворот, наклон, масштаб',
-          badge: 'NEW',
-          badgeColor: 'bg-blue-500/20 text-blue-400',
+          badge: 'NEW' as const,
+          badgeColor: 'bg-blue-500/20 text-blue-400' as const,
           type: 'cameraAngle' as const
         },
       ]
@@ -88,41 +80,36 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
       items: [
         {
           icon: RotateCw,
-          emoji: '📷',
           label: 'Камера (вращение)',
           subtitle: 'Изменение ракурса камеры',
-          badge: 'BETA',
-          badgeColor: 'bg-cyan-500/20 text-cyan-400',
+          badge: 'BETA' as const,
+          badgeColor: 'bg-cyan-500/20 text-cyan-400' as const,
           type: 'camera' as const
         },
         {
           icon: Brain,
-          emoji: '🧠',
           label: 'Мастер промпт',
           subtitle: 'Улучшение текстовых промптов',
-          badge: 'GPT-4o',
-          badgeColor: 'bg-green-500/20 text-green-400',
+          badge: 'GPT-4o' as const,
+          badgeColor: 'bg-green-500/20 text-green-400' as const,
           type: 'masterPrompt' as const
         },
         {
           icon: Palette,
-          emoji: '🎨',
           label: 'Модификатор стиля',
           subtitle: 'Стиль, освещение, настроение',
           type: 'modifier' as const
         },
         {
           icon: SplitSquareHorizontal,
-          emoji: '✂️',
           label: 'Array Splitter',
           subtitle: 'Разделение массивов данных',
-          badge: 'NEW',
-          badgeColor: 'bg-cyan-500/20 text-cyan-400',
+          badge: 'NEW' as const,
+          badgeColor: 'bg-cyan-500/20 text-cyan-400' as const,
           type: 'arraySplitter' as const
         },
         {
           icon: Type,
-          emoji: '💬',
           label: 'Комментарий',
           subtitle: 'Добавить заметку на холст',
           type: 'comment' as const
@@ -196,7 +183,7 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
 
               {/* Category Items */}
               <div className="space-y-1">
-                {category.items.map((item) => (
+                {category.items.map((item: any) => (
                   <button
                     key={item.label}
                     onClick={() => {
@@ -206,12 +193,11 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
                     }}
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors group text-left"
                   >
-                    {/* Emoji Icon */}
-                    {'emoji' in item && item.emoji && (
-                      <span className="text-lg flex-shrink-0">{item.emoji}</span>
-                    )}
+                    {/* Lucide Icon */}
+                    <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-white/70 group-hover:text-white group-hover:bg-white/8 transition-all">
+                      <item.icon size={18} />
+                    </div>
 
-                    {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium text-white group-hover:text-white/90">
                         {item.label}
@@ -224,9 +210,9 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
                     </div>
 
                     {/* Badge */}
-                    {'badge' in item && item.badge && (
-                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${item.badgeColor || ''} flex-shrink-0`}>
-                        {item.badge}
+                    {'badge' in item && item.badge && 'badgeColor' in item && item.badgeColor && (
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${item.badgeColor as string} flex-shrink-0`}>
+                        {item.badge as string}
                       </span>
                     )}
                   </button>
