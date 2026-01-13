@@ -133,9 +133,12 @@ body {
   background: #1f1f1f;
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
-  min-width: 440px;
+  min-width: 420px;
+  max-width: 450px;
   padding: 24px;
   font-family: 'Inter', -apple-system, sans-serif;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  /* НЕ добавляем transform - это замедлит перетаскивание! */
 }
 
 /* Выделенная нода */

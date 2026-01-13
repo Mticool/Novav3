@@ -88,7 +88,7 @@ export const VideoGeneratorNode = memo(({ id, data, selected }: NodeProps) => {
   };
 
   return (
-    <div className="relative w-[440px]">
+    <div className="relative w-[420px]">
       <NodeToolbar visible={selected} isLoading={!!isLoading} onRun={() => void handleGenerate()} onDelete={handleDelete} />
 
       <div className={`node relative ${selected ? 'selected' : ''}`}>

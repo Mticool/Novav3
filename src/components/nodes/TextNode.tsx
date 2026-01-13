@@ -14,7 +14,7 @@ export const TextNode = memo(({ id, data, selected }: NodeProps) => {
   };
 
   return (
-    <div className="w-[440px] relative">
+    <div className="w-[420px] relative">
       <div className={`node relative ${selected ? 'selected' : ''}`}>
         <Handle type="target" position={Position.Left} id="text-input" style={{ top: 78 }} />
 
