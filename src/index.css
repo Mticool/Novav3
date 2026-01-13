@@ -133,8 +133,8 @@ body {
   background: #1f1f1f;
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
-  min-width: 420px;
-  padding: 20px;
+  min-width: 440px;
+  padding: 24px;
   font-family: 'Inter', -apple-system, sans-serif;
 }
 
@@ -201,10 +201,20 @@ body {
   background: #2a2a2a;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  padding: 8px 12px;
+  padding: 10px 16px;
   color: #ffffff;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
+  min-width: 70px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.model-selector:hover:not(:disabled) {
+  background: #333;
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Панель действий над нодой */
@@ -254,6 +264,25 @@ body {
 
 .node-action-button:hover {
   background: rgba(255, 255, 255, 0.1);
+}
+
+/* NO OUTPUT область (улучшенная) */
+.node-preview {
+  background: rgba(255, 255, 255, 0.03);
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.node-preview-text {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
 }
 
 /* ===========================================

@@ -88,7 +88,7 @@ export const VideoGeneratorNode = memo(({ id, data, selected }: NodeProps) => {
   };
 
   return (
-    <div className="relative w-[420px]">
+    <div className="relative w-[440px]">
       <NodeToolbar visible={selected} isLoading={!!isLoading} onRun={() => void handleGenerate()} onDelete={handleDelete} />
 
       <div className={`node relative ${selected ? 'selected' : ''}`}>
@@ -105,10 +105,10 @@ export const VideoGeneratorNode = memo(({ id, data, selected }: NodeProps) => {
             🔗
           </button>
         </div>
-        <div className="-mt-4 mb-4 h-px bg-white/10" />
+        <div className="-mt-4 mb-6 h-px bg-white/10" />
 
         {/* Inputs */}
-        <div className="mt-4 space-y-2">
+        <div className="space-y-3">
           <div className="flex items-center justify-between pr-4">
             <span className="node-label">Начальное изображение</span>
             <span className="text-white/30"> </span>
@@ -124,7 +124,7 @@ export const VideoGeneratorNode = memo(({ id, data, selected }: NodeProps) => {
         </div>
 
         {/* Textarea */}
-        <div className="mt-4">
+        <div className="mt-6">
           <textarea
             value={localPrompt}
             onChange={(e) => {
@@ -139,8 +139,8 @@ export const VideoGeneratorNode = memo(({ id, data, selected }: NodeProps) => {
         </div>
 
         {/* Preview */}
-        <div className="mt-4">
-          <div className="h-[180px] w-full overflow-hidden rounded-[12px] border border-white/10 bg-black/20 flex items-center justify-center relative">
+        <div className="mt-6">
+          <div className="node-preview h-[200px] w-full overflow-hidden relative">
             {typeof nodeData.videoUrl === 'string' && nodeData.videoUrl ? (
               <>
                 <video src={nodeData.videoUrl} controls className="h-full w-full object-cover" />
@@ -149,13 +149,13 @@ export const VideoGeneratorNode = memo(({ id, data, selected }: NodeProps) => {
                 </div>
               </>
             ) : (
-              <div className="text-[13px] font-medium text-white/25">NO OUTPUT</div>
+              <div className="node-preview-text">NO OUTPUT</div>
             )}
           </div>
         </div>
 
         {/* Outputs (снизу) */}
-        <div className="mt-4 space-y-2 text-[13px] font-medium text-white/80 pr-4">
+        <div className="mt-6 space-y-3 text-[13px] font-medium text-white/80 pr-4">
           <div className="flex items-center justify-between">
             <span className="node-label">Начальное изображение</span>
             <span className="text-white/30"> </span>
@@ -176,7 +176,7 @@ export const VideoGeneratorNode = memo(({ id, data, selected }: NodeProps) => {
         <Handle type="source" position={Position.Right} id="video-output" style={{ bottom: 158 }} />
 
         {/* Bottom models bar (СТРОГО ВНИЗУ) */}
-        <div className="mt-4 border-t border-white/10 pt-4">
+        <div className="mt-6 border-t border-white/10 pt-5">
           <div className="flex items-center gap-2">
             <div className="flex-1">
               <ModelSelector
