@@ -12,58 +12,74 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
 
   const categories = [
     {
+      title: 'TOP',
+      items: [
+        {
+          icon: Upload,
+          emoji: '⬆️',
+          label: 'Загрузить',
+          subtitle: 'Изображение или видео',
+          type: 'imageUpload' as const,
+        },
+        {
+          icon: Image,
+          emoji: '🎬',
+          label: 'Медиа',
+          subtitle: 'Библиотека медиафайлов',
+          type: null as any,
+        },
+      ]
+    },
+    {
       title: 'УЗЛЫ',
       items: [
         {
           icon: Type,
-          emoji: '📝',
+          emoji: '🟢',
           label: 'Текст',
-          subtitle: 'Добавить текстовый узел',
+          subtitle: 'Текстовый узел для промптов',
           type: 'text' as const
         },
         {
           icon: Image,
-          emoji: '🎨',
+          emoji: '🔵',
           label: 'Генератор изображений',
           subtitle: 'AI генерация изображений',
           type: 'image' as const
         },
         {
           icon: Video,
-          emoji: '🎬',
+          emoji: '🟣',
           label: 'Генератор видео',
           subtitle: 'AI генерация видео',
           type: 'video' as const
         },
         {
-          icon: MessageSquare,
-          emoji: '🤖',
-          label: 'AI Ассистент',
-          subtitle: 'AI помощник для промптов',
-          badge: 'GPT-4o',
-          badgeColor: 'bg-green-500/20 text-green-400',
+          icon: Sparkles,
+          emoji: '✨',
+          label: 'Помощник',
+          subtitle: 'AI-помощник — ваш творческий партнер',
+          badge: 'AI',
+          badgeColor: 'bg-purple-500/20 text-purple-400',
           type: 'assistant' as const
         },
         {
-          icon: Brain,
-          emoji: '🧠',
-          label: 'Помощник',
-          subtitle: 'Улучшение промпта',
-          badge: 'AI',
-          badgeColor: 'bg-purple-500/20 text-purple-400',
-          type: 'masterPrompt' as const
+          icon: Wand2,
+          emoji: '🖼️',
+          label: 'Улучшение качества изображений',
+          subtitle: 'Upscale и улучшение деталей',
+          badge: 'PRO',
+          badgeColor: 'bg-orange-500/20 text-orange-400',
+          type: 'enhancement' as const
         },
-      ]
-    },
-    {
-      title: 'МЕДИА',
-      items: [
         {
-          icon: Upload,
-          emoji: '📤',
-          label: 'Загрузить',
-          subtitle: 'Изображение или видео',
-          type: 'imageUpload' as const,
+          icon: Move3d,
+          emoji: '📹',
+          label: 'Угол обзора камеры',
+          subtitle: 'Поворот, наклон, масштаб',
+          badge: 'NEW',
+          badgeColor: 'bg-blue-500/20 text-blue-400',
+          type: 'cameraAngle' as const
         },
       ]
     },
@@ -71,53 +87,35 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
       title: 'ИНСТРУМЕНТЫ',
       items: [
         {
-          icon: Wand2,
-          emoji: '⬆️',
-          label: 'Улучшение качества',
-          subtitle: 'Upscale изображений',
-          badge: 'PRO',
-          badgeColor: 'bg-orange-500/20 text-orange-400',
-          type: 'generator' as const
-        },
-        {
-          icon: Sparkles,
-          emoji: '✨',
-          label: 'Улучшение изображения',
-          subtitle: 'Резкость и контраст',
-          badge: 'NEW',
-          badgeColor: 'bg-yellow-500/20 text-yellow-400',
-          type: 'enhancement' as const
-        },
-        {
           icon: RotateCw,
           emoji: '📷',
-          label: 'Камера',
-          subtitle: 'Изменение ракурса',
+          label: 'Камера (вращение)',
+          subtitle: 'Изменение ракурса камеры',
           badge: 'BETA',
-          badgeColor: 'bg-blue-500/20 text-blue-400',
+          badgeColor: 'bg-cyan-500/20 text-cyan-400',
           type: 'camera' as const
         },
         {
-          icon: Move3d,
-          emoji: '🔄',
-          label: 'Угол камеры',
-          subtitle: 'Поворот, наклон, зум',
-          badge: 'NEW',
-          badgeColor: 'bg-purple-500/20 text-purple-400',
-          type: 'cameraAngle' as const
+          icon: Brain,
+          emoji: '🧠',
+          label: 'Мастер промпт',
+          subtitle: 'Улучшение текстовых промптов',
+          badge: 'GPT-4o',
+          badgeColor: 'bg-green-500/20 text-green-400',
+          type: 'masterPrompt' as const
         },
         {
           icon: Palette,
           emoji: '🎨',
-          label: 'Модификатор',
-          subtitle: 'Стиль, свет, угол',
+          label: 'Модификатор стиля',
+          subtitle: 'Стиль, освещение, настроение',
           type: 'modifier' as const
         },
         {
           icon: SplitSquareHorizontal,
           emoji: '✂️',
           label: 'Array Splitter',
-          subtitle: 'Разделение на список',
+          subtitle: 'Разделение массивов данных',
           badge: 'NEW',
           badgeColor: 'bg-cyan-500/20 text-cyan-400',
           type: 'arraySplitter' as const
@@ -126,7 +124,7 @@ export function AddNodesMenu({ onClose }: AddNodesMenuProps) {
           icon: Type,
           emoji: '💬',
           label: 'Комментарий',
-          subtitle: 'Заметки на холсте',
+          subtitle: 'Добавить заметку на холст',
           type: 'comment' as const
         },
       ]
