@@ -25,6 +25,7 @@ export const NodeToolbar = memo(({ visible, isLoading, onConnect, onRun, onDelet
       >
         <Link size={14} />
         <span className="ml-1.5">Подключиться к</span>
+        <span className="ml-1 text-[10px] opacity-70">▼</span>
       </button>
 
       <button

@@ -116,7 +116,7 @@ export const ImageGeneratorNode = memo(({ id, data, selected }: NodeProps) => {
               setLocalPrompt(v);
               updateNode(id, { prompt: v });
             }}
-            placeholder="Опишите изображение..."
+            placeholder="Запрос (связанный)"
             className="node-textarea"
             onClick={(e) => e.stopPropagation()}
           />
