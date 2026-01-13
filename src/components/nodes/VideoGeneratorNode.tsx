@@ -14,6 +14,8 @@ type VideoParams = {
   duration: number;
   fps: number;
   variants: number;
+  autoMode: boolean;
+  soundEffects: boolean;
 };
 
 const ASPECT_RATIO_OPTIONS: readonly SelectorOption[] = [
@@ -63,6 +65,8 @@ export const VideoGeneratorNode = memo(({ id, data, selected }: NodeProps) => {
           ? (legacySettings.fps as number)
           : 24,
     variants: typeof initialParams.variants === 'number' ? initialParams.variants : 1,
+    autoMode: initialParams.autoMode ?? false,
+    soundEffects: initialParams.soundEffects ?? true,
   });
 
   const [localPrompt, setLocalPrompt] = useState<string>((nodeData.prompt as string) || '');
@@ -132,7 +136,7 @@ export const VideoGeneratorNode = memo(({ id, data, selected }: NodeProps) => {
               setLocalPrompt(v);
               updateNode(id, { prompt: v });
             }}
-            placeholder="Запрос (связанный)"
+            placeholder="Опишите видео, которое хотите сгенерировать..."
             className="node-textarea"
             onClick={(e) => e.stopPropagation()}
           />
@@ -201,6 +205,34 @@ export const VideoGeneratorNode = memo(({ id, data, selected }: NodeProps) => {
             >
               ▶
             </button>
+          </div>
+
+          {/* Toggle switches (как в Pikaso) */}
+          <div className="mt-3 flex items-center gap-4">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={params.autoMode}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  setParams((p) => ({ ...p, autoMode: e.target.checked }));
+                }}
+                className="w-4 h-4 rounded border-white/20 bg-white/5 checked:bg-blue-500 cursor-pointer"
+              />
+              <span className="text-[13px] text-white/70">Автоматически</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={params.soundEffects}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  setParams((p) => ({ ...p, soundEffects: e.target.checked }));
+                }}
+                className="w-4 h-4 rounded border-white/20 bg-white/5 checked:bg-blue-500 cursor-pointer"
+              />
+              <span className="text-[13px] text-white/70">Звуковые эффекты</span>
+            </label>
           </div>
 
           {/* Вторая строка (как в референсе): - 1 +   ⚙ */}
